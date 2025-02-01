@@ -3,15 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
-// import com.revrobotics.CANSparkBase.IdleMode; // Please look at README docs in GitHub to change this
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-// import frc.lib.config.SwerveModuleConstants; // Please look at README docs in GitHub to change this
+import frc.robot.config.SwerveModuleConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -93,11 +92,68 @@ public final class Constants {
 
     /* Angle Encoder Invert */
     public static final boolean canCoderInvert = false;
+    
+    /* Module Specific Constants */
+    /* Front Left Module - Module 0 */
+    public static final class Mod0 {
+      public static final int driveMotorID = 10;
+      public static final int angleMotorID = 11;
+      public static final int canCoderID = 1;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(168.398);
+      public static final SwerveModuleConstants constants =
+          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+    }
+
+    /* Front Right Module - Module 1 */
+    public static final class Mod1 {
+      public static final int driveMotorID = 16;
+      public static final int angleMotorID = 17;
+      public static final int canCoderID = 4;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(225.879);
+      public static final SwerveModuleConstants constants =
+          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+    }
+
+    /* Back Left Module - Module 2 */
+    public static final class Mod2 {
+      public static final int driveMotorID = 12;
+      public static final int angleMotorID = 13;
+      public static final int canCoderID = 2;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-31.465);
+      public static final SwerveModuleConstants constants =
+          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+    }
+
+    /* Back Right Module - Module 3 */
+    public static final class Mod3 {
+      public static final int driveMotorID = 14;
+      public static final int angleMotorID = 15;
+      public static final int canCoderID = 3;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.541);
+      public static final SwerveModuleConstants constants =
+          new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+    }
+
+    /* Encoder Offsets */
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(215.04 - 8.69 + 180.0); // PLACEHOLDER NUMBERS
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(239.8 - 5.6 + 180.0); // PLACEHOLDER NUMBERS
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(155.49 + 2.74); // PLACEHOLDER NUMBERS
+    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(179.64 - 1.46 + 180.0); // PLACEHOLDER NUMBERS
   }
-  public static final class ArmConstants {}
-  public static final class ElevatorConstants {}
-  public static final class GripperConstants {}
-  public static final class IntakeConstants {}
+  public static final class ArmConstants {
+    public static final int ARM = 0;
+  }
+  public static final class ElevatorConstants {
+    public static final int ELEVATOR = 0;
+
+  }
+  public static final class GripperConstants {
+    public static final int GRIPPER = 0;
+  }
+  public static final class IntakeConstants {
+    public static final int INTAKE = 0;
+
+  }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
