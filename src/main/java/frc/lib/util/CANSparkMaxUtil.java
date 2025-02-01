@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.lib.util;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel;

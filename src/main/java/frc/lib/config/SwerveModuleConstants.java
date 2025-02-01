@@ -1,4 +1,4 @@
-package frc.robot.config;
+package frc.lib.config;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
