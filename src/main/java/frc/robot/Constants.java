@@ -48,7 +48,7 @@ public final class Constants {
             new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
             new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
             new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
-            
+
    /* Swerve Voltage Compensation */
     public static final double voltageComp = 12.0;
 
@@ -94,6 +94,10 @@ public final class Constants {
     /* Angle Encoder Invert */
     public static final boolean canCoderInvert = false;
   }
+  public static final class ArmConstants {}
+  public static final class ElevatorConstants {}
+  public static final class GripperConstants {}
+  public static final class IntakeConstants {}
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
