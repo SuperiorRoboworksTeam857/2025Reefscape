@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.config.PIDConstants;
 // import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,6 +28,12 @@ public class Swerve extends SubsystemBase {
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
 
+  private RobotConfig robotConfig;
+
+  
+
+  
+
   private Field2d field;
 
   public Swerve() {
@@ -48,8 +55,10 @@ public class Swerve extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
+        robotConfig = new RobotConfig()
+
     // Configure AutoBuilder last
-    AutoBuilder.configureHolonomic(
+    AutoBuilder.configure(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -61,6 +70,7 @@ public class Swerve extends SubsystemBase {
                     0.35, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
+            
             () -> {
               // Boolean supplier that controls when the path will be mirrored for the red alliance
               // This will flip the path being followed to the red side of the field.
