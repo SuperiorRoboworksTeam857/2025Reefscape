@@ -3,13 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-//import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.lib.config.SwerveModuleConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,9 +21,9 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class Swerve {
-    public static final double fastDriveSpeedMultiplier = 0.0; // NEEDS TO BE CHANGED
-    public static final double normalDriveSpeedMultiplier = 0.0; // NEEDS TO BE CHANGED
-    public static final double slowDriveSpeedMultiplier = 0.0; // NEEDS TO BE CHANGED
+    public static final double fastDriveSpeedMultiplier = 1.0; // NEEDS TO BE CHANGED
+    public static final double normalDriveSpeedMultiplier = 0.7; // NEEDS TO BE CHANGED
+    public static final double slowDriveSpeedMultiplier = 0.2; // NEEDS TO BE CHANGED
 
     public static final double stickDeadband = 0.1;
     public static final double robotMass = 50;
@@ -31,9 +31,9 @@ public final class Constants {
     public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(0.0); // NEEDS TO BE CHANGED
-    public static final double wheelBase = Units.inchesToMeters(0.0); // NEEDS TO BE CHANGED
-    public static final double wheelDiameter = Units.inchesToMeters(0.0); // NEEDS TO BE CHANGED
+    public static final double trackWidth = Units.inchesToMeters(21.75); // NEEDS TO BE CHANGED
+    public static final double wheelBase = Units.inchesToMeters(21.75); // NEEDS TO BE CHANGED
+    public static final double wheelDiameter = Units.inchesToMeters(4); // NEEDS TO BE CHANGED
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double openLoopRamp = 0.25;
@@ -99,7 +99,7 @@ public final class Constants {
       public static final int driveMotorID = 15;
       public static final int angleMotorID = 14;
       public static final int canCoderID = 1;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(168.398);
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(84.375); // NEED TO CHANGE
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -108,8 +108,8 @@ public final class Constants {
     public static final class Mod1 {
       public static final int driveMotorID = 12;
       public static final int angleMotorID = 13;
-      public static final int canCoderID = 4;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(225.879);
+      public static final int canCoderID = 2;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(126.211); // NEED TO CHANGE
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -118,8 +118,8 @@ public final class Constants {
     public static final class Mod2 {
       public static final int driveMotorID = 16;
       public static final int angleMotorID = 17;
-      public static final int canCoderID = 2;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-31.465);
+      public static final int canCoderID = 3;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(141.592); // NEED TO CHANGE
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
@@ -128,17 +128,17 @@ public final class Constants {
     public static final class Mod3 {
       public static final int driveMotorID = 11;
       public static final int angleMotorID = 10;
-      public static final int canCoderID = 3;
-      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(34.541);
+      public static final int canCoderID = 4;
+      public static final Rotation2d angleOffset = Rotation2d.fromDegrees(273.779); // NEED TO CHANGE
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
 
     /* Encoder Offsets */
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(215.04 - 8.69 + 180.0); // PLACEHOLDER NUMBERS
-    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(239.8 - 5.6 + 180.0); // PLACEHOLDER NUMBERS
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(155.49 + 2.74); // PLACEHOLDER NUMBERS
-    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(179.64 - 1.46 + 180.0); // PLACEHOLDER NUMBERS
+    // public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(215.04 - 8.69 + 180.0); // PLACEHOLDER NUMBERS
+    // public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = Math.toRadians(239.8 - 5.6 + 180.0); // PLACEHOLDER NUMBERS
+    // public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(155.49 + 2.74); // PLACEHOLDER NUMBERS
+    // public static final double kBackRightDriveAbsoluteEncoderOffsetRad = Math.toRadians(179.64 - 1.46 + 180.0); // PLACEHOLDER NUMBERS
   }
   public static final class ArmConstants {
     public static final int ARM = 0;
