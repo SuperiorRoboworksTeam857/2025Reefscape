@@ -73,10 +73,10 @@ public class TeleopSwerve extends Command {
                     rotationSup.getAsDouble(), Constants.Swerve.stickDeadband));
 
     /* Drive */
-    // s_Swerve.drive(
-    //     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-    //     rotationVal * Constants.Swerve.maxAngularVelocity,
-    //     !robotCentricSup.getAsBoolean(),
-    //     true);
+    s_Swerve.drive(
+        new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+        rotationVal * Constants.Swerve.maxAngularVelocity,
+        !robotCentricSup.getAsBoolean(),
+        true);
   }
 }

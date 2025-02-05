@@ -4,6 +4,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 //import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,11 +18,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import frc.lib.math.OnboardModuleState;
-// import frc.lib.util.CANCoderUtil;
-// import frc.lib.util.CANCoderUtil.CCUsage;
-// import frc.lib.util.CANSparkMaxUtil;
-// import frc.lib.util.CANSparkMaxUtil.Usage;
+import frc.lib.config.SwerveModuleConstants;
+import frc.lib.math.OnboardModuleState;
+import frc.lib.util.CANCoderUtil;
+import frc.lib.util.CANCoderUtil.CCUsage;
+import frc.lib.util.CANSparkMaxUtil;
+import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -122,6 +125,7 @@ public class SwerveModule {
       angleConfig.closedLoop.d(Constants.Swerve.angleKD);
       angleConfig.closedLoop.velocityFF(Constants.Swerve.angleKFF);
 
+      angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
       //angleMotor.configure(angleConfig,ResetMode.,PersistMode.); ADD RESETMODE AND PERSIST MODE CONFIG
     }
   
@@ -140,13 +144,17 @@ public class SwerveModule {
       // driveController.setFF(Constants.Swerve.angleKFF);
       driveConfig.voltageCompensation(Constants.Swerve.voltageComp);
       //driveMotor.burnFlash();
-      Timer.delay(1);
-      driveEncoder.setPosition(0.0);
+
       // new
       driveConfig.closedLoop.p(Constants.Swerve.angleKP);
       driveConfig.closedLoop.i(Constants.Swerve.angleKI);
       driveConfig.closedLoop.d(Constants.Swerve.angleKD);
       driveConfig.closedLoop.velocityFF(Constants.Swerve.angleKFF);
+
+      driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      
+      Timer.delay(1);
+      driveEncoder.setPosition(0.0);
     }
   
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {
