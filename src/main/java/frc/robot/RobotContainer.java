@@ -7,9 +7,18 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.ExampleAutos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Swerve;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
@@ -24,6 +33,30 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  /* Controllers */
+  private final Joystick gamepad = new Joystick(0);
+  private final Joystick driverStick = new Joystick(1);
+  private final Joystick buttonBox = new Joystick(2);
+
+  /* Drive Controls */
+  private final int translationAxis = Joystick.AxisType.kY.value;
+  private final int strafeAxis = Joystick.AxisType.kX.value;
+  private final int rotationAxis = Joystick.AxisType.kZ.value;
+
+  /* Driver Buttons */
+  private final JoystickButton zeroGyro = new JoystickButton(driverStick, 3);
+
+  private final JoystickButton slowSpeed = new JoystickButton(driverStick, 2);
+  private final JoystickButton highSpeed = new JoystickButton(driverStick,1);
+
+  /* Subsystems */
+  public final Swerve s_Swerve = new Swerve();
+
+
+
+
+
+
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -33,6 +66,21 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    CameraServer.startAutomaticCapture();
+
+    s_Swerve.setDefaultCommand(
+        new TeleopSwerve(
+            s_Swerve,
+            () -> -driverStick.getRawAxis(translationAxis),
+            () -> -driverStick.getRawAxis(strafeAxis),
+            () -> -driverStick.getRawAxis(rotationAxis),
+            () -> false,
+            () -> slowSpeed.getAsBoolean(),
+            () -> highSpeed.getAsBoolean()));
+
+
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -47,6 +95,14 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+    new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
+
+
+
+
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
