@@ -7,6 +7,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+// Notes: Gear Ratio 20:1 and we are using NEOS
+
 public class Elevator extends SubsystemBase {
     private static double deltaTime = 0.02;
     // Create a PID controller whose setpoint's change is subject to maximum
