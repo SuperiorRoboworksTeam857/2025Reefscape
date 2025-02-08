@@ -5,14 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.autos.ArmAuton;
 import frc.robot.autos.ExampleAutos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Elevator.Positions;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -51,18 +55,8 @@ public class RobotContainer {
 
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
+  public final Elevator s_Elevator = new Elevator();
 
-
-
-
-
-
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -99,17 +93,15 @@ public class RobotContainer {
 
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
+    /*
+     * Demo code for the Elevator positions
+     */
+    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kX.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
 
-
-
-
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
@@ -119,6 +111,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return ExampleAutos.exampleAuto(m_exampleSubsystem);
+    return new ArmAuton();
   }
 }
