@@ -11,7 +11,7 @@ Hello, I am Athena and I am one of your mentors. I started an outline for 2025Re
 - Rev Hardware
   - https://docs.revrobotics.com/revlib/24-to-25
   - https://codedocs.revrobotics.com/java/com/revrobotics/package-summary.html
-  - https://robotpy.readthedocs.io/projects/rev/en/2025.0.1/rev/SparkLowLevel.html#rev.SparkLowLevel.PeriodicStatus2.primaryEncoderPosition
+  - https://robotpy.readthedocs.io/projects/rev/en/stable/rev/SparkLowLevel.html#rev.SparkLowLevel.PeriodicFrame.kStatus0
 - PathPlanner
   - https://pathplanner.dev/api/java/
 - Comments are VERY important so other programmers can understand what you have worked on
