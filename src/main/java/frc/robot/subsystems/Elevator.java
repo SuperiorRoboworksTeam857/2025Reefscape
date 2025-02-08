@@ -26,7 +26,7 @@ public class Elevator extends SubsystemBase {
         new ProfiledPIDController(0.15, 0.0, 0.0, m_constraints, deltaTime);
   
     SparkMax motorLeft = new SparkMax(ElevatorConstants.elevatorLeftMotor, MotorType.kBrushless);
-    SparkMax motorRight = new SparkMax(ElevatorConstants.elevatorRightRobot, MotorType.kBrushless);
+    SparkMax motorRight = new SparkMax(ElevatorConstants.elevatorRightMotor, MotorType.kBrushless);
     SparkMaxConfig config = new SparkMaxConfig();
 
     // servos need to be pointed DOWN
@@ -96,15 +96,17 @@ public class Elevator extends SubsystemBase {
     }
   
     public boolean isElevatorAtGoal() {
-      return Math.abs(motorLeft.getEncoder().getPosition() - m_goalPosition) < 1.0;
+      double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
+      double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
+      return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
     }
   
     public boolean isElevatorHigh() {
-      return motorLeft.getEncoder().getPosition() < -45;
+      return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);
     }
   
     public boolean isElevatorLow() {
-      return motorLeft.getEncoder().getPosition() > -1;
+      return (Math.abs(motorLeft.getEncoder().getPosition()) < 1) || (Math.abs(motorRight.getEncoder().getPosition()) < 1);
     }
   
     public void resetEncoders() {
@@ -112,6 +114,6 @@ public class Elevator extends SubsystemBase {
       motorRight.getEncoder().setPosition(0);
     }
     public boolean isMoving() {
-        return Math.abs(motorLeft.getEncoder().getVelocity()) > 1.0;
+        return (Math.abs(motorLeft.getEncoder().getVelocity()) > 1.0) || (Math.abs(motorRight.getEncoder().getVelocity()) > 1.0);
     }
 }

@@ -141,7 +141,7 @@ public final class Constants {
 
   public static final class ElevatorConstants {
     public static final int elevatorLeftMotor = 20;
-    public static final int elevatorRightRobot = 21;
+    public static final int elevatorRightMotor = 21;
     public static final int elevatorMotorInverse = 1;
     public static final int elevatorLeftServoMotor = 0; // NEEDS TO BE CHANGED
     public static final int elevatorRightServoMotor = 1; // NEEDS TO BE CHANGED
