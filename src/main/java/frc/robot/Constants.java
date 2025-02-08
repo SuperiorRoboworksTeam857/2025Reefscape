@@ -134,20 +134,24 @@ public final class Constants {
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
   }
-  public static final class ArmConstants {
-    public static final int ARM = 0;
-  }
-  public static final class ElevatorConstants {
-    public static final int ELEVATOR = 0;
 
+  public static final class WristConstants {
+    public static final int wristMotor = 30; // NEEDS TO BE CHANGED
   }
+
+  public static final class ElevatorConstants {
+    public static final int elevatorMotor = 20; // NEEDS TO BE CHANGED
+  }
+
   public static final class GripperConstants {
     public static final int GRIPPER = 0;
   }
-  public static final class IntakeConstants {
-    public static final int INTAKE = 0;
 
+  public static final class IntakeConstants {
+    public static final int intakeMotor = 2; // NEEDS TO BE CHANGED
+    public static final double intakeSpeedMultiplier = 0.2;
   }
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }

@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 
 // Notes: Gear Ratio 20:1 and we are using NEOS
 
@@ -20,14 +24,16 @@ public class Elevator extends SubsystemBase {
   
     // or should we use SparkMaxPIDController?
   
-    SparkMax motor = new SparkMax(20, MotorType.kBrushless);
+    SparkMax motor = new SparkMax(ElevatorConstants.elevatorMotor, MotorType.kBrushless);
+    SparkMaxConfig config = new SparkMaxConfig();
   
     // Range of motion of 0 inches at bottom to -24.5 inches at top
     public enum Positions {
-      FLOOR,
-      SUBSTATION_SIDEWAYS_CONE,
-      MID,
-      HIGH
+      CORAL_STATION_L2,
+      CORAL_STATION_L3,
+      CORAL_STATION_L4,
+      HUMANPLAYER_STATION,
+      IDLE_MODE,
     }
   
     private double m_goalPosition = 0;
@@ -37,9 +43,10 @@ public class Elevator extends SubsystemBase {
       double gearRatio = 25; // 25:1
       double driveConversionPositionFactor = (sprocketDiameter * Math.PI) / gearRatio;
       double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0;
-  
-      motor.getEncoder().setVelocityConversionFactor(driveConversionVelocityFactor);
-      motor.getEncoder().setPositionConversionFactor(driveConversionPositionFactor);
+      config.encoder
+      .positionConversionFactor(driveConversionPositionFactor)
+      .velocityConversionFactor(driveConversionVelocityFactor);
+      motor.configure(config,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
     }
   
     @Override
@@ -53,17 +60,19 @@ public class Elevator extends SubsystemBase {
   
     public void goToPosition(Positions position) {
       switch (position) {
-        case FLOOR:
-          m_goalPosition = 0;
+        case CORAL_STATION_L2:
+          m_goalPosition = -30.41;
           break;
-        case SUBSTATION_SIDEWAYS_CONE:
-          m_goalPosition = -10.125;
+        case CORAL_STATION_L3:
+          m_goalPosition = -46.26;
           break;
-        case MID:
-          m_goalPosition = -17.625;
+        case CORAL_STATION_L4:
+          m_goalPosition = -71.87;
           break;
-        case HIGH:
-          m_goalPosition = -23.125;
+        case HUMANPLAYER_STATION:
+          m_goalPosition = -37.75;
+        case IDLE_MODE:
+          m_goalPosition = -0;
           break;
       }
     }
@@ -73,7 +82,7 @@ public class Elevator extends SubsystemBase {
     }
   
     public boolean isElevatorHigh() {
-      return motor.getEncoder().getPosition() < -12;
+      return motor.getEncoder().getPosition() < -45;
     }
   
     public boolean isElevatorLow() {
@@ -82,5 +91,8 @@ public class Elevator extends SubsystemBase {
   
     public void resetEncoders() {
       motor.getEncoder().setPosition(0);
+    }
+    public boolean isMoving() {
+        return Math.abs(motor.getEncoder().getVelocity()) > 1.0;
     }
 }
