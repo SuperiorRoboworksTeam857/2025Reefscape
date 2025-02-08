@@ -24,7 +24,7 @@ SparkMaxConfig config = new SparkMaxConfig();
     private static final double intake = 0.15;
     private static final double transport = 0.4;
   
-  public enum Positions {
+  public enum w_Positions {
     WRIST_L2_L3,
     WRIST_L4,
     INTAKE,
@@ -62,7 +62,7 @@ SparkMaxConfig config = new SparkMaxConfig();
     SmartDashboard.putNumber("wrist speed", m_absoluteEncoder.getVelocity());
   }
 
-  public void goToAngle(Positions position) {
+  public void goToAngle(w_Positions position) {
     switch (position) {
       case WRIST_L2_L3:
         m_goalAngle = wristL2L3;

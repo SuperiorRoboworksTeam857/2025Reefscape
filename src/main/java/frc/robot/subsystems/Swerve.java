@@ -7,6 +7,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 // import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Swerve extends SubsystemBase {
   private final AHRS gyro;
@@ -53,35 +55,39 @@ public class Swerve extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
+    // initialize from GUI Settings of Pathplanner
+    try{
+      robotConfig = RobotConfig.fromGUISettings();
+    }catch(Exception e){
+      e.printStackTrace();
+    }
     //robotConfig = new RobotConfig()
 
     // Configure AutoBuilder last
-    // AutoBuilder.configure(
-    //         this::getPose, // Robot pose supplier
-    //         this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-    //         this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-    //         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-    //                 new PIDConstants(4.0, 0.0, 0.0), // Translation PID constants
-    //                 new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
-    //                 4.5, // Max module speed, in m/s
-    //                 0.35, // Drive base radius in meters. Distance from robot center to furthest module.
-    //                 new ReplanningConfig() // Default path replanning config. See the API for the options here
-    //         ),
-            
-    //         () -> {
-    //           // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //           // This will flip the path being followed to the red side of the field.
-    //           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // using new docs for PathPlanner changes: https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getCurrentSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(4.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(1.5, 0.0, 0.0) // Rotation PID constants
+            ),
+            robotConfig,
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //           var alliance = DriverStation.getAlliance();
-    //           if (alliance.isPresent()) {
-    //             return alliance.get() == DriverStation.Alliance.Red;
-    //           }
-    //           return false;
-    //         },
-    //         this // Reference to this subsystem to set requirements
-    // );
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
   }
 
   public void drive(

@@ -13,6 +13,8 @@ import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -56,7 +59,7 @@ public class RobotContainer {
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
-
+  public final Wrist s_Wrist = new Wrist();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -96,13 +99,54 @@ public class RobotContainer {
     /*
      * Demo code for the Elevator positions
      */
-    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kX.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
+    // new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator));
+    // new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator));
+    // new JoystickButton(gamepad, XboxController.Button.kX.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4), s_Elevator));
+    // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
+    // new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
 
+    new POVButton(gamepad, 0).whileTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(
+          () -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION),s_Elevator
+        ),
+        new InstantCommand(
+        () -> s_Wrist.goToAngle(w_Positions.INTAKE),s_Wrist
+        )
+      )
+    );
+    new POVButton(gamepad, 90).whileTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(
+          () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2),s_Elevator
+        ),
+        new InstantCommand(
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
+        )
+      )
+    );
+    new POVButton(gamepad, 180).whileTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(
+          () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3),s_Elevator
+        ),
+        new InstantCommand(
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
+        )
+      )
+    );
+    new POVButton(gamepad, 270).whileTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(
+          () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
+        ),
+        new InstantCommand(
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist
+        )
+      )
+    );
   }
+    
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
