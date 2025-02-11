@@ -143,13 +143,13 @@ public final class Constants {
     public static final int elevatorLeftMotor = 20;
     public static final int elevatorRightMotor = 21;
     public static final int elevatorMotorInverse = 1;
-    public static final int elevatorLeftServoMotor = 0; // NEEDS TO BE CHANGED
-    public static final int elevatorRightServoMotor = 1; // NEEDS TO BE CHANGED
+    public static final int elevatorLeftServoMotor = 0;
+    public static final int elevatorRightServoMotor = 1;
 
     public static final double servoLeftReleased = 0.5;
     public static final double servoRightReleased = 0.5;
-    public static final double servoLeftPressed = 0;
-    public static final double servoRightPressed = 1;
+    public static final double servoLeftPressed = 0.2;
+    public static final double servoRightPressed = 0.7;
   }
 
   public static final class GripperConstants {
@@ -157,7 +157,7 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int intakeMotor = 2; // NEEDS TO BE CHANGED
+    public static final int intakeMotor = 22; // NEEDS TO BE CHANGED
     public static final double intakeSpeedMultiplier = 0.2;
   }
 
