@@ -64,56 +64,56 @@ public class Elevator extends SubsystemBase {
       servoLeft.set(ElevatorConstants.servoLeftPressed);
       servoRight.set(ElevatorConstants.servoRightPressed);
 
-      m_controller_left.setGoal(ElevatorConstants.elevatorMotorInverse * m_goalPosition);
+      m_controller_left.setGoal(ElevatorConstants.elevatorMotorInverse * -m_goalPosition);
       motorLeft.set(m_controller_left.calculate(motorLeft.getEncoder().getPosition()));
-      m_controller_right.setGoal(ElevatorConstants.elevatorMotorInverse * -m_goalPosition);
+      m_controller_right.setGoal(ElevatorConstants.elevatorMotorInverse * m_goalPosition);
       motorRight.set(m_controller_right.calculate(motorRight.getEncoder().getPosition()));
   
       SmartDashboard.putNumber("elevator position left", motorLeft.getEncoder().getPosition());
       SmartDashboard.putNumber("elevator speed left", motorLeft.getEncoder().getVelocity());
-      SmartDashboard.putNumber("elevator position right", motorLeft.getEncoder().getPosition());
-      SmartDashboard.putNumber("elevator speed right", motorLeft.getEncoder().getVelocity());
-      SmartDashboard.putNumber("ideal position", m_goalPosition);
+      SmartDashboard.putNumber("elevator position right", motorRight.getEncoder().getPosition());
+      SmartDashboard.putNumber("elevator speed right", motorRight.getEncoder().getVelocity());
+      SmartDashboard.putNumber("elevator ideal position", m_goalPosition);
     }
   
     public void goToPosition(Positions position) {
       switch (position) {
-        case CORAL_STATION_L2:
-          m_goalPosition = -30.41;
-          break;
-        case CORAL_STATION_L3:
-          m_goalPosition = -46.26;
-          break;
-        case CORAL_STATION_L4:
-          m_goalPosition = -41.87;
-          break;
         case HUMANPLAYER_STATION:
-          m_goalPosition = -37.75;
+          m_goalPosition = 0;
         case IDLE_MODE:
           m_goalPosition = 0;
+          break;
+        case CORAL_STATION_L2:
+          m_goalPosition = 10;
+          break;
+        case CORAL_STATION_L3:
+          m_goalPosition = 29;
+          break;
+        case CORAL_STATION_L4:
+          m_goalPosition = 20;
           break;
       }
     }
   
-    public boolean isElevatorAtGoal() {
-      double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
-      double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
-      return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
-    }
+    // public boolean isElevatorAtGoal() {
+    //   double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
+    //   double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
+    //   return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
+    // }
   
-    public boolean isElevatorHigh() {
-      return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);
-    }
+    // public boolean isElevatorHigh() {
+    //   return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);
+    // }
   
-    public boolean isElevatorLow() {
-      return (Math.abs(motorLeft.getEncoder().getPosition()) < 1) || (Math.abs(motorRight.getEncoder().getPosition()) < 1);
-    }
+    // public boolean isElevatorLow() {
+    //   return (Math.abs(motorLeft.getEncoder().getPosition()) < 1) || (Math.abs(motorRight.getEncoder().getPosition()) < 1);
+    // }
   
     public void resetEncoders() {
       motorLeft.getEncoder().setPosition(0);
       motorRight.getEncoder().setPosition(0);
     }
-    public boolean isMoving() {
-        return (Math.abs(motorLeft.getEncoder().getVelocity()) > 1.0) || (Math.abs(motorRight.getEncoder().getVelocity()) > 1.0);
-    }
+    // public boolean isMoving() {
+    //     return (Math.abs(motorLeft.getEncoder().getVelocity()) > 1.0) || (Math.abs(motorRight.getEncoder().getVelocity()) > 1.0);
+    // }
 }
