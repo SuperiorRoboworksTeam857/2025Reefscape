@@ -105,7 +105,7 @@ public class RobotContainer {
     // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
     // new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
 
-    new POVButton(gamepad, 0).whileTrue(
+    new POVButton(gamepad, 180).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION),s_Elevator
@@ -125,7 +125,7 @@ public class RobotContainer {
         )
       )
     );
-    new POVButton(gamepad, 180).whileTrue(
+    new POVButton(gamepad, 270).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3),s_Elevator
@@ -135,7 +135,7 @@ public class RobotContainer {
         )
       )
     );
-    new POVButton(gamepad, 270).whileTrue(
+    new POVButton(gamepad, 0).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
