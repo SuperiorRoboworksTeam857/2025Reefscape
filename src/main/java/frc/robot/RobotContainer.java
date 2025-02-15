@@ -12,6 +12,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.w_Positions;
@@ -60,6 +61,7 @@ public class RobotContainer {
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
   public final Wrist s_Wrist = new Wrist();
+  public final Intake s_Intake = new Intake();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -76,6 +78,7 @@ public class RobotContainer {
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean()));
 
+    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.stopIntake(), s_Intake));
 
 
     // Configure the trigger bindings
@@ -141,10 +144,15 @@ public class RobotContainer {
           () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
         ),
         new InstantCommand(
-        () -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist // THIS SHOULD NOT BE L4
         )
       )
     );
+
+    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.intakeGamePiece(), s_Intake));
+
+    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
+
   }
     
 
