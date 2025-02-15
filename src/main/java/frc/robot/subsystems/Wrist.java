@@ -21,7 +21,7 @@ public class Wrist extends SubsystemBase {
 
   private static final double wristL2L3 = 0.78;
   private static final double wristL4 = 0.17;
-  private static final double intake = 0.70;
+  private static final double intake = 0.74;
   
   public enum w_Positions {
     WRIST_L2_L3,
