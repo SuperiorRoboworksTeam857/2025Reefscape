@@ -136,7 +136,7 @@ public final class Constants {
   }
 
   public static final class WristConstants {
-    public static final int wristMotor = 30; // NEEDS TO BE CHANGED
+    public static final int wristMotor = 23;
   }
 
   public static final class ElevatorConstants {
@@ -157,7 +157,7 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int intakeMotor = 22; // NEEDS TO BE CHANGED
+    public static final int intakeMotor = 22;
     public static final double intakeSpeedMultiplier = 0.2;
   }
 
