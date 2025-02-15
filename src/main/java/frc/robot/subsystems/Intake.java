@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -8,10 +10,18 @@ public class Intake extends SubsystemBase {
   
   private SparkFlex flexMotor = new SparkFlex(IntakeConstants.intakeMotor, MotorType.kBrushless);
 
+  private DigitalInput beamBreak = new DigitalInput(IntakeConstants.beamBreak);
+
   public Intake() {}
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putBoolean("Is Coral In Intake?", isCoralInIntake());
+  }
+
+  public boolean isCoralInIntake() {
+    return beamBreak.get();
+  }
 
   public void runIntake(double speed) {
     flexMotor.set(speed*IntakeConstants.intakeSpeedMultiplier);

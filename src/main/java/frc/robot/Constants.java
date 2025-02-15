@@ -159,6 +159,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int intakeMotor = 22;
     public static final double intakeSpeedMultiplier = 0.2;
+    public static final int beamBreak = 0;
   }
 
   public static class OperatorConstants {
