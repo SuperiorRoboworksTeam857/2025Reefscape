@@ -108,6 +108,7 @@ public class RobotContainer {
     // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
     // new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
 
+    // Elevator
     new POVButton(gamepad, 180).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
@@ -149,6 +150,10 @@ public class RobotContainer {
       )
     );
 
+
+
+
+    // Intake
     new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.intakeGamePiece(), s_Intake));
 
     new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
