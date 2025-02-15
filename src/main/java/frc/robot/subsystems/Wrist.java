@@ -16,19 +16,17 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 public class Wrist extends SubsystemBase {
 
   SparkMax motor = new SparkMax(WristConstants.wristMotor, MotorType.kBrushless);
-SparkMaxConfig config = new SparkMaxConfig();
+  SparkMaxConfig config = new SparkMaxConfig();
   private final AbsoluteEncoder m_absoluteEncoder;
 
-    private static final double wristL2L3 = 0.9;
-    private static final double wristL4 = 0.75;
-    private static final double intake = 0.15;
-    private static final double transport = 0.4;
+  private static final double wristL2L3 = 0.78;
+  private static final double wristL4 = 0.17;
+  private static final double intake = 0.70;
   
   public enum w_Positions {
     WRIST_L2_L3,
     WRIST_L4,
     INTAKE,
-    TRANSPORT,
   }
 
   private static double deltaTime = 0.02;
@@ -39,7 +37,7 @@ SparkMaxConfig config = new SparkMaxConfig();
   private final ProfiledPIDController m_controller =
       new ProfiledPIDController(5, 0.0, 0.0, m_constraints, deltaTime);
 
-  private double m_goalAngle = transport;
+  private double m_goalAngle = wristL2L3;
 
   public Wrist() {
     m_absoluteEncoder = motor.getAbsoluteEncoder();
@@ -47,10 +45,10 @@ SparkMaxConfig config = new SparkMaxConfig();
     double encoderPositionFactor = (2 * Math.PI); // radians
     double encoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
 
-   config.encoder
+    config.encoder
       .positionConversionFactor(encoderPositionFactor)
       .velocityConversionFactor(encoderVelocityFactor);
-      motor.configure(config,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
+    motor.configure(config,ResetMode.kResetSafeParameters,PersistMode.kPersistParameters);
   }
 
   @Override
@@ -72,9 +70,6 @@ SparkMaxConfig config = new SparkMaxConfig();
         break;
       case INTAKE:
         m_goalAngle = intake;
-        break;
-      case TRANSPORT:
-        m_goalAngle = transport;
         break;
     }
   }
