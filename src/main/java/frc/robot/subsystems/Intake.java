@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean isCoralInIntake() {
-    return beamBreak.get();
+    return !beamBreak.get();
   }
 
   public void runIntake(double speed) {
