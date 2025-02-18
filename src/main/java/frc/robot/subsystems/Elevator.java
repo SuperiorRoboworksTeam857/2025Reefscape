@@ -33,6 +33,11 @@ public class Elevator extends SubsystemBase {
     // servos need to be pointed DOWN
     Servo servoLeft = new Servo(ElevatorConstants.elevatorLeftServoMotor);
     Servo servoRight = new Servo(ElevatorConstants.elevatorRightServoMotor);
+    private static final double humanPlayerStation = 0;
+    private static final double coralStation_L2 = 14;
+    private static final double coralStation_L3 = 30;
+    private static final double coralStation_L4 = 29;
+    private static final double idleMode = 0;
   
     // Range of motion of 0 inches at bottom to -24.5 inches at top
     public enum Positions {
@@ -45,8 +50,7 @@ public class Elevator extends SubsystemBase {
     public Positions currentPosition = Positions.IDLE_MODE;
     private double m_goalPosition = 0;
   
-    public Elevator(Wrist currentWrist) {
-      wrist = currentWrist;
+    public Elevator() {
       double sprocketDiameter = 22 * 0.25 / Math.PI; // 22 teeth at 0.25 inch pitch
       double gearRatio = 20; // 20:1
       double driveConversionPositionFactor = (sprocketDiameter * Math.PI) / gearRatio;
@@ -90,20 +94,23 @@ public class Elevator extends SubsystemBase {
 
       switch (position) {
         case HUMANPLAYER_STATION:
-          m_goalPosition = 0;
+          m_goalPosition = humanPlayerStation;
         case IDLE_MODE:
-          m_goalPosition = 0;
+          m_goalPosition = idleMode;
           break;
         case CORAL_STATION_L2:
-          m_goalPosition = 14;
+          m_goalPosition = coralStation_L2;
           break;
         case CORAL_STATION_L3:
-          m_goalPosition = 30;
+          m_goalPosition = coralStation_L3;
           break;
         case CORAL_STATION_L4:
-          m_goalPosition = 29;
+          m_goalPosition = coralStation_L4;
           break;
       }
+    }
+    public void setWrist(Wrist currentWrist){
+      wrist = currentWrist;
     }
   
     public boolean isElevatorAtGoal() {

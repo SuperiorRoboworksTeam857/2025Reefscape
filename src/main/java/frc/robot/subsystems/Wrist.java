@@ -42,8 +42,7 @@ public class Wrist extends SubsystemBase {
 
   private double m_goalAngle = wristL2L3;
 
-  public Wrist(Elevator currentElevator) {
-    elevator = currentElevator;
+  public Wrist() {
     m_absoluteEncoder = motor.getAbsoluteEncoder();
 
     double encoderPositionFactor = (2 * Math.PI); // radians
@@ -76,6 +75,9 @@ public class Wrist extends SubsystemBase {
         m_goalAngle = intake;
         break;
     }
+  }
+  public void setElevator(Elevator currentElevator){
+    elevator = currentElevator;
   }
   public void wristToggle(){
     if(!elevator.isElevatorAtGoal()){

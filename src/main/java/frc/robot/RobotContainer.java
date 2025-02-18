@@ -60,11 +60,13 @@ public class RobotContainer {
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
-  public final Wrist s_Wrist = new Wrist(s_Elevator);
+  public final Wrist s_Wrist = new Wrist();
   public final Intake s_Intake = new Intake();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    s_Elevator.setWrist(s_Wrist);
+    s_Wrist.setElevator(s_Elevator);
 
     CameraServer.startAutomaticCapture();
 
