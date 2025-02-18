@@ -15,6 +15,7 @@ import frc.robot.Constants.ElevatorConstants;
 // Notes: Gear Ratio 20:1 and we are using NEOS
 
 public class Elevator extends SubsystemBase {
+    Wrist wrist;
     private static double deltaTime = 0.02;
     // Create a PID controller whose setpoint's change is subject to maximum
     // velocity and acceleration constraints.
@@ -41,14 +42,16 @@ public class Elevator extends SubsystemBase {
       HUMANPLAYER_STATION,
       IDLE_MODE,
     }
-  
+    public Positions currentPosition = Positions.IDLE_MODE;
     private double m_goalPosition = 0;
   
-    public Elevator() {
+    public Elevator(Wrist currentWrist) {
+      wrist = currentWrist;
       double sprocketDiameter = 22 * 0.25 / Math.PI; // 22 teeth at 0.25 inch pitch
       double gearRatio = 20; // 20:1
       double driveConversionPositionFactor = (sprocketDiameter * Math.PI) / gearRatio;
       double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0;
+    
 
       config.encoder
         .positionConversionFactor(driveConversionPositionFactor)
@@ -77,6 +80,14 @@ public class Elevator extends SubsystemBase {
     }
   
     public void goToPosition(Positions position) {
+      if(wrist.isWristToggle()){
+        return;
+      }
+
+      if(!wrist.isWristAtGoal()){
+        return;
+      }
+
       switch (position) {
         case HUMANPLAYER_STATION:
           m_goalPosition = 0;
@@ -95,11 +106,11 @@ public class Elevator extends SubsystemBase {
       }
     }
   
-    // public boolean isElevatorAtGoal() {
-    //   double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
-    //   double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
-    //   return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
-    // }
+    public boolean isElevatorAtGoal() {
+      double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
+      double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
+      return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
+    }
   
     // public boolean isElevatorHigh() {
     //   return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);
