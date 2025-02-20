@@ -138,6 +138,9 @@ public final class Constants {
   public static final class WristConstants {
     public static final int wristMotor = 23;
   }
+  public static final class AlgaeArmConstants {
+    public static final int armMotor = 24;
+  }
 
   public static final class ElevatorConstants {
     public static final int elevatorLeftMotor = 20;
