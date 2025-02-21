@@ -6,13 +6,10 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.ArmAuton;
-import frc.robot.autos.ExampleAutos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
@@ -180,8 +177,6 @@ public class RobotContainer {
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-    // new Trigger(() -> gamepad.getRawAxis(XboxController.Axis.kLeftY.value) < -0.3)
-    //     .whileTrue(new RunCommand(() -> s_Elevator.setOperatingMode(Elevator.OperatingMode.CLIMBING_ELEVATOR_UP), s_Elevator));
 
 
 
