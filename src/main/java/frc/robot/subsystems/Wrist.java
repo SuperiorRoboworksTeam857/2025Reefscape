@@ -38,6 +38,7 @@ public class Wrist extends SubsystemBase {
       new ProfiledPIDController(5, 0.0, 0.0, m_constraints, deltaTime);
 
   private double m_goalAngle = wristL2L3;
+  private w_Positions targetPosition = w_Positions.INTAKE;
 
   public Wrist() {
     m_absoluteEncoder = motor.getAbsoluteEncoder();
@@ -61,6 +62,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void goToAngle(w_Positions position) {
+    targetPosition = position;
     switch (position) {
       case WRIST_L2_L3:
         m_goalAngle = wristL2L3;
@@ -76,6 +78,14 @@ public class Wrist extends SubsystemBase {
 
   public boolean isWristAtGoal() {
     return Math.abs(m_absoluteEncoder.getPosition() - m_goalAngle) < 0.03;
+  }
+
+  public w_Positions getIntendedPosition(){
+    return targetPosition;
+  }
+
+  public int invertIntake(){
+    return (targetPosition == w_Positions.WRIST_L4) ? -1 : 1;
   }
 
   public void resetEncoders() {
