@@ -11,17 +11,12 @@ public class Intake extends SubsystemBase {
   private SparkFlex flexMotor = new SparkFlex(IntakeConstants.intakeMotor, MotorType.kBrushless);
 
   private DigitalInput beamBreak = new DigitalInput(IntakeConstants.beamBreak);
-  private boolean isIntaking = false;
 
   public Intake() {}
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Is Coral In Intake?", isCoralInIntake());
-    if(isIntaking&&isCoralInIntake()){
-      stopIntake();
-      isIntaking = false;
-    }
   }
 
   public boolean isCoralInIntake() {
@@ -41,11 +36,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeGamePiece() {
-    if(isCoralInIntake()){
-      return;
-    }
     runIntake(-1.0);
-    isIntaking = true;
   }
 
   // TODO: make aware of L4 because outtaking is normally same as intaking except at L4 wrist position

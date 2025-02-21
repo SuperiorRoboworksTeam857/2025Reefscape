@@ -67,6 +67,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     CameraServer.startAutomaticCapture();
 
     s_Swerve.setDefaultCommand(
@@ -154,9 +155,6 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new InstantCommand(
         () -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist
-        ),
-        new InstantCommand(
-        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist // THIS SHOULD NOT BE L4
         )
       )
     );
