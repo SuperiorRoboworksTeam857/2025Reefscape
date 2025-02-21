@@ -5,11 +5,14 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ElevatorConstants;
 
 // Notes: Gear Ratio 20:1 and we are using NEOS
@@ -43,6 +46,14 @@ public class Elevator extends SubsystemBase {
     }
   
     private double m_goalPosition = 0;
+
+    public enum OperatingMode{
+      CLIMBING_ELEVATOR_UP,
+      CLIMBING_ELEVATOR_DOWN,
+      SCORING,
+    }
+
+    private OperatingMode m_OperatingMode = OperatingMode.SCORING;
   
     public Elevator() {
       double sprocketDiameter = 22 * 0.25 / Math.PI; // 22 teeth at 0.25 inch pitch
@@ -61,14 +72,28 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
 
-      servoLeft.set(ElevatorConstants.servoLeftPressed);
-      servoRight.set(ElevatorConstants.servoRightPressed);
+      switch(m_OperatingMode) {
+        case SCORING:
+          servoLeft.set(ElevatorConstants.servoLeftPressed);
+          servoRight.set(ElevatorConstants.servoRightPressed);
 
-      m_controller_left.setGoal(ElevatorConstants.elevatorMotorInverse * -m_goalPosition);
-      motorLeft.set(m_controller_left.calculate(motorLeft.getEncoder().getPosition()));
-      m_controller_right.setGoal(ElevatorConstants.elevatorMotorInverse * m_goalPosition);
-      motorRight.set(m_controller_right.calculate(motorRight.getEncoder().getPosition()));
-  
+          m_controller_left.setGoal(ElevatorConstants.elevatorMotorInverse * -m_goalPosition);
+          motorLeft.set(m_controller_left.calculate(motorLeft.getEncoder().getPosition()));
+          m_controller_right.setGoal(ElevatorConstants.elevatorMotorInverse * m_goalPosition);
+          motorRight.set(m_controller_right.calculate(motorRight.getEncoder().getPosition()));
+          break;
+
+        case CLIMBING_ELEVATOR_UP:
+          servoLeft.set(ElevatorConstants.servoLeftPressed);
+          servoRight.set(ElevatorConstants.servoRightPressed);
+          break;
+        
+        case CLIMBING_ELEVATOR_DOWN:
+          servoLeft.set(ElevatorConstants.servoLeftReleased);
+          servoRight.set(ElevatorConstants.servoRightReleased);
+          break;
+      } 
+      
       SmartDashboard.putNumber("elevator position left", motorLeft.getEncoder().getPosition());
       SmartDashboard.putNumber("elevator speed left", motorLeft.getEncoder().getVelocity());
       SmartDashboard.putNumber("elevator position right", motorRight.getEncoder().getPosition());
@@ -77,6 +102,8 @@ public class Elevator extends SubsystemBase {
     }
   
     public void goToPosition(Positions position) {
+      setOperatingMode(OperatingMode.SCORING);
+
       switch (position) {
         case HUMANPLAYER_STATION:
           m_goalPosition = 0;
@@ -93,6 +120,10 @@ public class Elevator extends SubsystemBase {
           m_goalPosition = 29;
           break;
       }
+    }
+
+    public void setOperatingMode(OperatingMode operatingMode){
+      m_OperatingMode = operatingMode;
     }
   
     // public boolean isElevatorAtGoal() {
@@ -116,4 +147,43 @@ public class Elevator extends SubsystemBase {
     // public boolean isMoving() {
     //     return (Math.abs(motorLeft.getEncoder().getVelocity()) > 1.0) || (Math.abs(motorRight.getEncoder().getVelocity()) > 1.0);
     // }
+
+  public void runElevatorForClimbing(double speed)
+  {
+    //positive speed and position are up for right motor
+
+    speed = MathUtil.applyDeadband(speed, Constants.Swerve.stickDeadband);
+
+    boolean movingUp = (speed > 0);
+    boolean movingDown = (speed < 0);
+
+    if ((motorRight.getEncoder().getPosition() > 0 && movingDown) ||
+       (motorRight.getEncoder().getPosition() < 7 && movingUp)) {
+      if (movingUp) {
+        setOperatingMode(OperatingMode.CLIMBING_ELEVATOR_UP);
+      } else if (movingDown) {
+        setOperatingMode(OperatingMode.CLIMBING_ELEVATOR_DOWN);
+      }
+
+      motorLeft.set(-speed);
+      motorRight.set(speed);
+    }
+    else {
+      setOperatingMode(OperatingMode.CLIMBING_ELEVATOR_DOWN);
+      motorLeft.set(0);
+      motorRight.set(0);
+    }
+  }
+
+
+
+    /*
+     * Climbing
+     * 
+     * Stick up, release ratchet, don't set goal, move elevator up, bounds limit elevator
+     * Stick down, engage ratchet, don't set goal, move elevator down, bounds limit elevator
+     * 
+     * other buttons, release ratchet, set goal
+     * 
+     */
 }

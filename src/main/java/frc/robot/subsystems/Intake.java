@@ -27,6 +27,14 @@ public class Intake extends SubsystemBase {
     flexMotor.set(speed*IntakeConstants.intakeSpeedMultiplier);
   }
 
+  public void autoIntake(){
+    if (isCoralInIntake()){
+      stopIntake();
+    } else {
+      runIntake(-1.0);
+    }
+  }
+
   public void intakeGamePiece() {
     runIntake(-1.0);
   }

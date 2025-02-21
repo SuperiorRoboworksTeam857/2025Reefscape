@@ -10,6 +10,7 @@ import frc.robot.autos.ExampleAutos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
+import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
@@ -62,6 +63,7 @@ public class RobotContainer {
   public final Elevator s_Elevator = new Elevator();
   public final Wrist s_Wrist = new Wrist();
   public final Intake s_Intake = new Intake();
+  public final AlgaeArm s_Arm = new AlgaeArm();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -78,7 +80,7 @@ public class RobotContainer {
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean()));
 
-    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.stopIntake(), s_Intake));
+    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
 
 
     // Configure the trigger bindings
@@ -139,17 +141,30 @@ public class RobotContainer {
         )
       )
     );
+    // new POVButton(gamepad, 0).whileTrue(
+    //   new SequentialCommandGroup(
+    //     new InstantCommand(
+    //       () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
+    //     ),
+    //     new InstantCommand(
+    //     () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist // THIS SHOULD NOT BE L4
+    //     )
+    //   )
+    // );
     new POVButton(gamepad, 0).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
-          () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
-        ),
-        new InstantCommand(
-        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist // THIS SHOULD NOT BE L4
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist
         )
       )
     );
 
+
+    new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
+        .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
+        .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
+    // new Trigger(() -> gamepad.getRawAxis(XboxController.Axis.kLeftY.value) < -0.3)
+    //     .whileTrue(new RunCommand(() -> s_Elevator.setOperatingMode(Elevator.OperatingMode.CLIMBING_ELEVATOR_UP), s_Elevator));
 
 
 

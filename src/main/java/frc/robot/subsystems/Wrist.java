@@ -20,7 +20,7 @@ public class Wrist extends SubsystemBase {
   private final AbsoluteEncoder m_absoluteEncoder;
 
   private static final double wristL2L3 = 0.78;
-  private static final double wristL4 = 0.17;
+  private static final double wristL4 = 0.25;//0.17
   private static final double intake = 0.74;
   
   public enum w_Positions {
