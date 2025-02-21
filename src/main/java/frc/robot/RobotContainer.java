@@ -18,9 +18,16 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -65,10 +72,21 @@ public class RobotContainer {
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
 
+  /* Autonomous Chooser */
+  private final SendableChooser<Command> autoChooser;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     CameraServer.startAutomaticCapture();
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Selector:", autoChooser);
+
+    // Configure the NamedCommands
+    NamedCommands.registerCommand("runIntakeIn", new InstantCommand(() -> s_Intake.intakeGamePiece()));
+
+    NamedCommands.registerCommand("runIntakeOut", new InstantCommand(() -> s_Intake.outtakeGamePiece()));
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -81,7 +99,6 @@ public class RobotContainer {
             () -> highSpeed.getAsBoolean()));
 
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
-
 
     // Configure the trigger bindings
     configureBindings();
@@ -182,7 +199,39 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new ArmAuton();
+    // if (buttonBox.getRawButton(3) && buttonBox.getRawButton(4) && buttonBox.getRawButton(5) &&
+    //     buttonBox.getRawButton(6) && buttonBox.getRawButton(7)) {
+    //   return new PathPlannerAuto("4 note center at distance amp first");
+    // } else if (buttonBox.getRawButton(3) && buttonBox.getRawButton(4) && buttonBox.getRawButton(5) &&
+    //            buttonBox.getRawButton(6)) {
+    //   return new PathPlannerAuto("4 note center at distance source first");
+    // } else if (buttonBox.getRawButton(3)) {
+    //   return new PathPlannerAuto("2 note center");
+    // } else {
+    //   if (buttonBox.getRawButton(4)) {
+    //     // amp side
+    //     if (buttonBox.getRawButton(5)) {
+    //       return new PathPlannerAuto("2 note amp side");
+    //     } else if (buttonBox.getRawButton(6)) {
+    //       return new PathPlannerAuto("3 note center amp side");
+    //     } else if (buttonBox.getRawButton(7)) {
+    //       return new PathPlannerAuto("2 note amp side straight to centerline");
+    //     }
+    //   } else {
+    //     // source side
+    //     if (buttonBox.getRawButton(5)) {
+    //       return new PathPlannerAuto("2 note source side");
+    //     } else if (buttonBox.getRawButton(6)) {
+    //       return new PathPlannerAuto("3 note center source side");
+    //     } else if (buttonBox.getRawButton(7)) {
+    //       return new PathPlannerAuto("2 note source side straight to centerline");
+    //     }
+    //   }
+    // }
+
+    // return new PathPlannerAuto("just shoot");
+
+    // Use the autoChooser to choose an autonomous
+    return autoChooser.getSelected();
   }
 }

@@ -61,7 +61,6 @@ public class Swerve extends SubsystemBase {
     }catch(Exception e){
       e.printStackTrace();
     }
-    //robotConfig = new RobotConfig()
 
     // Configure AutoBuilder last
     // using new docs for PathPlanner changes: https://pathplanner.dev/pplib-getting-started.html#install-pathplannerlib
