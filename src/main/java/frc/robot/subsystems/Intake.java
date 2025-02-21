@@ -11,16 +11,24 @@ public class Intake extends SubsystemBase {
   private SparkFlex flexMotor = new SparkFlex(IntakeConstants.intakeMotor, MotorType.kBrushless);
 
   private DigitalInput beamBreak = new DigitalInput(IntakeConstants.beamBreak);
+  private boolean coralInIntake = false;
 
   public Intake() {}
 
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Is Coral In Intake?", isCoralInIntake());
+    coralInIntake = SmartDashboard.getBoolean("Override Coral Sensor", isBeamBreakBroken())
+  }
+
+
+  // method to get the state of if the coral is in the intake
+  private boolean isBeamBreakBroken(){
+    return !beamBreak.get();
   }
 
   public boolean isCoralInIntake() {
-    return !beamBreak.get();
+    return coralInIntake;
   }
 
   public void runIntake(double speed) {
