@@ -18,6 +18,7 @@ import frc.robot.Constants.ElevatorConstants;
 // Notes: Gear Ratio 20:1 and we are using NEOS
 
 public class Elevator extends SubsystemBase {
+    Wrist wrist;
     private static double deltaTime = 0.02;
     // Create a PID controller whose setpoint's change is subject to maximum
     // velocity and acceleration constraints.
@@ -35,6 +36,11 @@ public class Elevator extends SubsystemBase {
     // servos need to be pointed DOWN
     Servo servoLeft = new Servo(ElevatorConstants.elevatorLeftServoMotor);
     Servo servoRight = new Servo(ElevatorConstants.elevatorRightServoMotor);
+    private static final double humanPlayerStation = 0;
+    private static final double coralStation_L2 = 14;
+    private static final double coralStation_L3 = 30;
+    private static final double coralStation_L4 = 29;
+    private static final double idleMode = 0;
   
     // Range of motion of 0 inches at bottom to -24.5 inches at top
     public enum Positions {
@@ -44,7 +50,7 @@ public class Elevator extends SubsystemBase {
       HUMANPLAYER_STATION,
       IDLE_MODE,
     }
-  
+    public Positions currentPosition = Positions.IDLE_MODE;
     private double m_goalPosition = 0;
 
     public enum OperatingMode{
@@ -60,6 +66,7 @@ public class Elevator extends SubsystemBase {
       double gearRatio = 20; // 20:1
       double driveConversionPositionFactor = (sprocketDiameter * Math.PI) / gearRatio;
       double driveConversionVelocityFactor = driveConversionPositionFactor / 60.0;
+    
 
       config.encoder
         .positionConversionFactor(driveConversionPositionFactor)
@@ -103,21 +110,20 @@ public class Elevator extends SubsystemBase {
   
     public void goToPosition(Positions position) {
       setOperatingMode(OperatingMode.SCORING);
-
       switch (position) {
         case HUMANPLAYER_STATION:
-          m_goalPosition = 0;
+          m_goalPosition = humanPlayerStation;
         case IDLE_MODE:
-          m_goalPosition = 0;
+          m_goalPosition = idleMode;
           break;
         case CORAL_STATION_L2:
-          m_goalPosition = 14;
+          m_goalPosition = coralStation_L2;
           break;
         case CORAL_STATION_L3:
-          m_goalPosition = 30;
+          m_goalPosition = coralStation_L3;
           break;
         case CORAL_STATION_L4:
-          m_goalPosition = 29;
+          m_goalPosition = coralStation_L4;
           break;
       }
     }
@@ -126,11 +132,11 @@ public class Elevator extends SubsystemBase {
       m_OperatingMode = operatingMode;
     }
   
-    // public boolean isElevatorAtGoal() {
-    //   double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
-    //   double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
-    //   return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
-    // }
+    public boolean isElevatorAtGoal() {
+      double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
+      double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
+      return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
+    }
   
     // public boolean isElevatorHigh() {
     //   return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);

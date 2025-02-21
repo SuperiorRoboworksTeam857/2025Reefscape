@@ -14,7 +14,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
 public class Wrist extends SubsystemBase {
-
+  Elevator elevator;
   SparkMax motor = new SparkMax(WristConstants.wristMotor, MotorType.kBrushless);
   SparkMaxConfig config = new SparkMaxConfig();
   private final AbsoluteEncoder m_absoluteEncoder;
@@ -22,12 +22,15 @@ public class Wrist extends SubsystemBase {
   private static final double wristL2L3 = 0.78;
   private static final double wristL4 = 0.25;//0.17
   private static final double intake = 0.74;
+  private static final double DEFAULT_POSITION = 0; //Change later please
   
   public enum w_Positions {
     WRIST_L2_L3,
     WRIST_L4,
     INTAKE,
+    DEFAULT_POSITION,
   }
+  private boolean isWristToggle = false;
 
   private static double deltaTime = 0.02;
   // Create a PID controller whose setpoint's change is subject to maximum
@@ -72,6 +75,44 @@ public class Wrist extends SubsystemBase {
         m_goalAngle = intake;
         break;
     }
+  }
+  public void setElevator(Elevator currentElevator){
+    elevator = currentElevator;
+  }
+  public void wristToggle(){
+    if(!elevator.isElevatorAtGoal()){
+      return;
+    }
+    isWristToggle = !isWristToggle;
+    if(isWristToggle){
+      switch (elevator.currentPosition) {
+        case CORAL_STATION_L2:
+          m_goalAngle = wristL2L3;
+          break;
+        case CORAL_STATION_L3:
+          m_goalAngle = wristL2L3;
+          break;
+        case CORAL_STATION_L4:
+          m_goalAngle = wristL4;
+          break;
+        case HUMANPLAYER_STATION:
+          m_goalAngle = intake;
+          break;
+        case IDLE_MODE:
+            m_goalAngle = DEFAULT_POSITION;
+            break;
+        default:
+          break;
+      }
+    }
+    else {
+      m_goalAngle = DEFAULT_POSITION;
+
+    }
+  }
+
+  public boolean isWristToggle(){
+    return isWristToggle;
   }
 
   public boolean isWristAtGoal() {
