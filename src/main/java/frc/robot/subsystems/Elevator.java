@@ -36,6 +36,8 @@ public class Elevator extends SubsystemBase {
     // servos need to be pointed DOWN
     Servo servoLeft = new Servo(ElevatorConstants.elevatorLeftServoMotor);
     Servo servoRight = new Servo(ElevatorConstants.elevatorRightServoMotor);
+
+    Servo cageServo = new Servo(ElevatorConstants.cageGrabberServo);
   
     // Range of motion of 0 inches at bottom to -24.5 inches at top
     public enum Positions {
@@ -177,7 +179,13 @@ public class Elevator extends SubsystemBase {
   }
 
 
+  public void closeCageGrabber(){
+    cageServo.set(ElevatorConstants.cageServoVertical);
+  }
 
+  public void openCageGrabber(){
+    cageServo.set(ElevatorConstants.cageServoHorizontal);
+  }
     /*
      * Climbing
      * 
