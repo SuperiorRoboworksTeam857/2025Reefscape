@@ -9,12 +9,6 @@
           "data": {
             "pathName": "Straight Line"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "runIntakeIn"
-          }
         }
       ]
     }

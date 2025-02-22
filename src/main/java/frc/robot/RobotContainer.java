@@ -13,6 +13,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.AlgaeArm.a_Positions;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
 
@@ -173,7 +174,10 @@ public class RobotContainer {
 
     new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
     new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
-
+    //Algea Arm
+    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
+    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
+    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
 
 
     // Intake
@@ -190,6 +194,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    if (buttonBox.getRawButton(3)){
+      return new PathPlannerAuto("Straight Line");
+    }
     // if (buttonBox.getRawButton(3) && buttonBox.getRawButton(4) && buttonBox.getRawButton(5) &&
     //     buttonBox.getRawButton(6) && buttonBox.getRawButton(7)) {
     //   return new PathPlannerAuto("4 note center at distance amp first");

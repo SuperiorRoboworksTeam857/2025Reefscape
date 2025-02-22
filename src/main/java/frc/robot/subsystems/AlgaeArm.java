@@ -19,8 +19,8 @@ public class AlgaeArm extends SubsystemBase {
   SparkMax motor = new SparkMax(AlgaeArmConstants.armMotor, MotorType.kBrushless);
   SparkMaxConfig config = new SparkMaxConfig();
 
-  private static final double raisedPosition = 0;
-  private static final double horizontalPosition = 0;
+  private static final double raisedPosition = 60;
+  private static final double horizontalPosition = 42;
   private static final double loweredPosition = 0;
   
   public enum a_Positions {
