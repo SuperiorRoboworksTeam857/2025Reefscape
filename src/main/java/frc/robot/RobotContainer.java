@@ -120,7 +120,7 @@ public class RobotContainer {
 
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
-    // Limelight controls
+    // Limelight Controls
     new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
       new InstantCommand(
         () -> s_limelight.setPipeline(Limelight.Pipeline.AprilTags)));
@@ -168,6 +168,7 @@ public class RobotContainer {
     //   )
     // );
 
+    // Wrist
     new POVButton(gamepad, 0).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
@@ -175,26 +176,18 @@ public class RobotContainer {
         )
       )
     );
-
     new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist));
 
-
-
-
+    // Elevator
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-
     new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
     new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
 
-
-
     // Intake
     new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.intakeGamePiece(), s_Intake));
-
     new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
-
   }
     
 
