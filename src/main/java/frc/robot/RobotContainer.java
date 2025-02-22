@@ -120,6 +120,11 @@ public class RobotContainer {
 
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
+    // Limelight controls
+    new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
+      new InstantCommand(
+        () -> s_limelight.setPipeline(Limelight.Pipeline.AprilTags)));
+
     // Elevator
     new POVButton(gamepad, 180).whileTrue(
       new SequentialCommandGroup(
@@ -151,6 +156,7 @@ public class RobotContainer {
         )
       )
     );
+
     // new POVButton(gamepad, 0).whileTrue(
     //   new SequentialCommandGroup(
     //     new InstantCommand(
@@ -161,6 +167,7 @@ public class RobotContainer {
     //     )
     //   )
     // );
+
     new POVButton(gamepad, 0).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
