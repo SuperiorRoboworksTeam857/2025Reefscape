@@ -22,11 +22,13 @@ public class Wrist extends SubsystemBase {
   private static final double wristL2L3 = 0.78;
   private static final double wristL4 = 0.25;//0.17
   private static final double intake = 0.74;
+  private static final double climbAngle = 0.3;
   
   public enum w_Positions {
     WRIST_L2_L3,
     WRIST_L4,
     INTAKE,
+    CLIMB_FINAL,
   }
 
   private static double deltaTime = 0.02;
@@ -72,6 +74,9 @@ public class Wrist extends SubsystemBase {
         break;
       case INTAKE:
         m_goalAngle = intake;
+        break;
+      case CLIMB_FINAL:
+        m_goalAngle = climbAngle;
         break;
     }
   }
