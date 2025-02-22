@@ -35,10 +35,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
-
-//dsfkjsdfkjfkjfs
-//dsfkjsdfkjfkjfs
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -57,6 +53,7 @@ public class RobotContainer {
   private final int rotationAxis = Joystick.AxisType.kZ.value;
 
   /* Driver Buttons */
+  private final JoystickButton robotCentric = new JoystickButton(driverStick, 4);
   private final JoystickButton zeroGyro = new JoystickButton(driverStick, 3);
 
   private final JoystickButton slowSpeed = new JoystickButton(driverStick, 2);
@@ -74,7 +71,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    // Start camera streams for both webcams
+    CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
 
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -91,7 +89,7 @@ public class RobotContainer {
             () -> -driverStick.getRawAxis(translationAxis),
             () -> -driverStick.getRawAxis(strafeAxis),
             () -> -driverStick.getRawAxis(rotationAxis),
-            () -> false,
+            () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean()));
 
@@ -114,15 +112,6 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
-
-    /*
-     * Demo code for the Elevator positions
-     */
-    // new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator));
-    // new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator));
-    // new JoystickButton(gamepad, XboxController.Button.kX.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4), s_Elevator));
-    // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator));
-    // new JoystickButton(gamepad, XboxController.Button.kBack.value).whileTrue(new RunCommand(() -> s_Elevator.goToPosition(Positions.IDLE_MODE), s_Elevator));
 
     // Elevator
     new POVButton(gamepad, 180).whileTrue(
@@ -173,10 +162,17 @@ public class RobotContainer {
       )
     );
 
+    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist));
+
+
+
 
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
+
+    new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
 
 
 
