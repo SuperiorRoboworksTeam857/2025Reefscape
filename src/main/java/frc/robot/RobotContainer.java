@@ -15,6 +15,7 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
+import frc.robot.subsystems.Limelight;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -65,6 +66,8 @@ public class RobotContainer {
   public final Wrist s_Wrist = new Wrist();
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
+  public final Limelight s_limelight = new Limelight();
+
 
   /* Autonomous Chooser */
   private final SendableChooser<Command> autoChooser;
@@ -74,6 +77,9 @@ public class RobotContainer {
     // Start camera streams for both webcams
     CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
+
+    s_limelight.turnOnDriverCam();
+    s_limelight.enableLimelight(false);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Selector:", autoChooser);
