@@ -153,6 +153,10 @@ public final class Constants {
     public static final double servoRightReleased = 0.5;
     public static final double servoLeftPressed = 0.2;
     public static final double servoRightPressed = 0.7;
+
+    public static final int cageGrabberServo = 9;
+    public static final double cageServoVertical = 0.55;
+    public static final double cageServoHorizontal = 0;
   }
 
   public static final class GripperConstants {
