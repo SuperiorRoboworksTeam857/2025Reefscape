@@ -16,6 +16,7 @@ import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.AlgaeArm.a_Positions;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
+import frc.robot.subsystems.Limelight;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -66,6 +67,8 @@ public class RobotContainer {
   public final Wrist s_Wrist = new Wrist();
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
+  public final Limelight s_limelight = new Limelight();
+
 
   /* Autonomous Chooser */
   private final SendableChooser<Command> autoChooser;
@@ -75,6 +78,9 @@ public class RobotContainer {
     // Start camera streams for both webcams
     CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
+
+    s_limelight.turnOnDriverCam();
+    s_limelight.enableLimelight(false);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Selector:", autoChooser);
@@ -90,6 +96,7 @@ public class RobotContainer {
             () -> -driverStick.getRawAxis(translationAxis),
             () -> -driverStick.getRawAxis(strafeAxis),
             () -> -driverStick.getRawAxis(rotationAxis),
+            () -> false, // NEEDS TO BE CHECKED
             () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean()));
@@ -113,6 +120,11 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
+
+    // Limelight Controls
+    new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
+      new InstantCommand(
+        () -> s_limelight.setPipeline(Limelight.Pipeline.AprilTags)));
 
     // Elevator
     new POVButton(gamepad, 180).whileTrue(
@@ -145,6 +157,7 @@ public class RobotContainer {
         )
       )
     );
+
     // new POVButton(gamepad, 0).whileTrue(
     //   new SequentialCommandGroup(
     //     new InstantCommand(
@@ -155,6 +168,8 @@ public class RobotContainer {
     //     )
     //   )
     // );
+
+    // Wrist
     new POVButton(gamepad, 0).whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
@@ -162,16 +177,12 @@ public class RobotContainer {
         )
       )
     );
-
     new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist));
 
-
-
-
+    // Elevator
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-
     new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
     new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
     //Algea Arm
@@ -182,9 +193,7 @@ public class RobotContainer {
 
     // Intake
     new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.intakeGamePiece(), s_Intake));
-
     new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
-
   }
     
 
