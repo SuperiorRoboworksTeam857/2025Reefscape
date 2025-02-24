@@ -23,7 +23,7 @@ public final class Constants {
   public static final class Swerve {
     public static final double fastDriveSpeedMultiplier = 1.0; // NEEDS TO BE CHANGED
     public static final double normalDriveSpeedMultiplier = 0.7; // NEEDS TO BE CHANGED
-    public static final double slowDriveSpeedMultiplier = 0.2; // NEEDS TO BE CHANGED
+    public static final double slowDriveSpeedMultiplier = 0.25; // NEEDS TO BE CHANGED
 
     public static final double stickDeadband = 0.1;
     public static final double robotMass = 50;

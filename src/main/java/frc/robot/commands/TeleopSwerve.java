@@ -52,7 +52,7 @@ public class TeleopSwerve extends Command {
 
     double speedMultiplier = Constants.Swerve.normalDriveSpeedMultiplier;
     if (highSpeedSup.getAsBoolean()) speedMultiplier = Constants.Swerve.fastDriveSpeedMultiplier;
-    if (slowSpeedSup.getAsBoolean()) speedMultiplier = Constants.Swerve.slowDriveSpeedMultiplier;
+    if (slowSpeedSup.getAsBoolean() || robotCentricSup.getAsBoolean()) speedMultiplier = Constants.Swerve.slowDriveSpeedMultiplier;
 
     double rotationSpeedMultiplier = Math.min(speedMultiplier, Constants.Swerve.normalDriveSpeedMultiplier);
 

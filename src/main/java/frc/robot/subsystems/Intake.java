@@ -39,9 +39,13 @@ public class Intake extends SubsystemBase {
     runIntake(-1.0);
   }
 
+  public void reverseIntake(){
+    runIntake(3.0);
+  }
+
   // TODO: make aware of L4 because outtaking is normally same as intaking except at L4 wrist position
   public void outtakeGamePiece() {
-    runIntake(1.0);
+    runIntake(-1.0);
   }
 
   public void stopIntake() {

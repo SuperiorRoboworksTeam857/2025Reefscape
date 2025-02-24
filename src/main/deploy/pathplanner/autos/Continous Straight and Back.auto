@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Straight Line"
+            "pathName": "Straight Line and Back"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "runIntakeIn"
+            "waitTime": 6.0
           }
         }
       ]

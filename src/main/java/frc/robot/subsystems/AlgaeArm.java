@@ -19,8 +19,8 @@ public class AlgaeArm extends SubsystemBase {
   SparkMax motor = new SparkMax(AlgaeArmConstants.armMotor, MotorType.kBrushless);
   SparkMaxConfig config = new SparkMaxConfig();
 
-  private static final double raisedPosition = 60;
-  private static final double horizontalPosition = 42;
+  private static final double raisedPosition = 2.7;
+  private static final double horizontalPosition = 2;
   private static final double loweredPosition = 0;
   
   public enum a_Positions {
@@ -33,15 +33,16 @@ public class AlgaeArm extends SubsystemBase {
   // Create a PID controller whose setpoint's change is subject to maximum
   // velocity and acceleration constraints.
   private final TrapezoidProfile.Constraints m_constraints =
-      new TrapezoidProfile.Constraints(1, 40);
+      new TrapezoidProfile.Constraints(10, 10);
   private final ProfiledPIDController m_controller =
-      new ProfiledPIDController(5, 0.0, 0.0, m_constraints, deltaTime);
+      new ProfiledPIDController(0.15, 0.0, 0.0, m_constraints, deltaTime);
 
   private double m_goalAngle = loweredPosition;
 
   public AlgaeArm() {
-    double encoderPositionFactor = (2 * Math.PI); // radians
-    double encoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
+    double gearRatio = 25;
+    double encoderPositionFactor = (2 * Math.PI) / gearRatio; // radians
+    double encoderVelocityFactor = (2 * Math.PI) / 60.0 / gearRatio; // radians per second
 
     config.encoder
       .positionConversionFactor(encoderPositionFactor)
@@ -52,9 +53,10 @@ public class AlgaeArm extends SubsystemBase {
   @Override
   public void periodic() {
     m_controller.setGoal(m_goalAngle);
-    //motor.set(m_controller.calculate(motor.getEncoder().getPosition()));
+    motor.set(m_controller.calculate(motor.getEncoder().getPosition()));
 
     SmartDashboard.putNumber("arm position", motor.getEncoder().getPosition());
+    SmartDashboard.putNumber("arm goal position", m_goalAngle);
   }
 
   public void goToAngle(a_Positions position) {
