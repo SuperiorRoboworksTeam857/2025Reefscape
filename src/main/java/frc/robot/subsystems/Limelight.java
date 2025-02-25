@@ -20,6 +20,19 @@ public class Limelight extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("distance to tag", distanceToAprilTagMeters());
   }
+  public int aprilTagID(){
+    var limeLight = getLimelightValue("tid");
+    return (int)limeLight;
+  }
+  public boolean aprilTagValid(){
+    var tagValid = getLimelightValue("tv");
+    if(tagValid == 1){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 
   public double distanceToAprilTagMeters() {
     var pose = getLimelightArray("camerapose_targetspace");

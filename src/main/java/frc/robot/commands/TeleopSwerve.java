@@ -24,6 +24,7 @@ public class TeleopSwerve extends Command {
   private BooleanSupplier robotCentricSup;
   private BooleanSupplier slowSpeedSup;
   private BooleanSupplier highSpeedSup;
+  private BooleanSupplier aligntoReefSup;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
@@ -36,6 +37,7 @@ public class TeleopSwerve extends Command {
       DoubleSupplier rotationSup,
       BooleanSupplier limelight, // NEEDS TO BE CHECKED
       BooleanSupplier robotCentricSup,
+      BooleanSupplier aligntoReefSup,
       BooleanSupplier slowSpeedSup,
       BooleanSupplier highSpeedSup) {
     this.s_Swerve = s_Swerve;
@@ -48,6 +50,7 @@ public class TeleopSwerve extends Command {
     this.robotCentricSup = robotCentricSup;
     this.slowSpeedSup = slowSpeedSup;
     this.highSpeedSup = highSpeedSup;
+    this.aligntoReefSup = aligntoReefSup;
   }
 
   @Override
@@ -55,7 +58,7 @@ public class TeleopSwerve extends Command {
 
     double speedMultiplier = Constants.Swerve.normalDriveSpeedMultiplier;
     if (highSpeedSup.getAsBoolean()) speedMultiplier = Constants.Swerve.fastDriveSpeedMultiplier;
-    if (slowSpeedSup.getAsBoolean() || robotCentricSup.getAsBoolean()) speedMultiplier = Constants.Swerve.slowDriveSpeedMultiplier;
+    if (slowSpeedSup.getAsBoolean() || robotCentricSup.getAsBoolean() || aligntoReefSup.getAsBoolean() ) speedMultiplier = Constants.Swerve.slowDriveSpeedMultiplier;
 
     double rotationSpeedMultiplier = Math.min(speedMultiplier, Constants.Swerve.normalDriveSpeedMultiplier);
 
@@ -79,7 +82,7 @@ public class TeleopSwerve extends Command {
     s_Swerve.drive(
         new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
         rotationVal * Constants.Swerve.maxAngularVelocity,
-        !robotCentricSup.getAsBoolean(),
+        !(robotCentricSup.getAsBoolean()||aligntoReefSup.getAsBoolean()),
         true);
   }
 }

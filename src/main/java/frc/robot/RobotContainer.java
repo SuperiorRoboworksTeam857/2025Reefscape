@@ -61,6 +61,9 @@ public class RobotContainer {
   private final JoystickButton slowSpeed = new JoystickButton(driverStick, 2);
   private final JoystickButton highSpeed = new JoystickButton(driverStick,1);
 
+  
+  private final JoystickButton aligntoReef = new JoystickButton(driverStick, 5);
+
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
@@ -99,7 +102,8 @@ public class RobotContainer {
             () -> false, // NEEDS TO BE CHECKED
             () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean(),
-            () -> highSpeed.getAsBoolean()));
+            () -> highSpeed.getAsBoolean(),
+            () -> aligntoReef.getAsBoolean()));
 
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
 

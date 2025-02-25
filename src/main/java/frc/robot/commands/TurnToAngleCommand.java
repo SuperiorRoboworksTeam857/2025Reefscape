@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.lib.math.OnboardModuleState;
 // import frc.lib.math.OnboardModuleState;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
@@ -37,45 +38,45 @@ public class TurnToAngleCommand extends Command {
     complete = false;
   }
 
-  // @Override
-  // public void execute() {
-  //   double gyroAngle = s_Swerve.getYaw().getDegrees(); // do we need to negate this number?
+  @Override
+  public void execute() {
+    double gyroAngle = s_Swerve.getYaw().getDegrees(); // do we need to negate this number?
 
-  //   final double kP = 0.2;
-  //   SmartDashboard.putNumber("TurnToAngle - gyroAngle", gyroAngle);
-  //   SmartDashboard.putNumber("TurnToAngle - goal angle", angle);
+    final double kP = 0.2;
+    SmartDashboard.putNumber("TurnToAngle - gyroAngle", gyroAngle);
+    SmartDashboard.putNumber("TurnToAngle - goal angle", angle);
 
-  //   SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(angle * 0.5));
-  //   desiredState =
-  //       OnboardModuleState.optimize(desiredState, Rotation2d.fromDegrees(gyroAngle * 0.5));
-  //   angle = desiredState.angle.getDegrees() * 2;
+    SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(angle * 0.5));
+    desiredState =
+        OnboardModuleState.optimize(desiredState, Rotation2d.fromDegrees(gyroAngle * 0.5));
+    angle = desiredState.angle.getDegrees() * 2;
 
-  //   SmartDashboard.putNumber("TurnToAngle - corrected goal angle", angle);
+    SmartDashboard.putNumber("TurnToAngle - corrected goal angle", angle);
 
-  //   double err = angle - gyroAngle;
-  //   double speed =
-  //       MathUtil.clamp(
-  //           err * kP,
-  //           -Constants.Swerve.maxAngularVelocity * 0.5,
-  //           Constants.Swerve.maxAngularVelocity * 0.5);
+    double err = angle - gyroAngle;
+    double speed =
+        MathUtil.clamp(
+            err * kP,
+            -Constants.Swerve.maxAngularVelocity * 0.5,
+            Constants.Swerve.maxAngularVelocity * 0.5);
 
-  //   SmartDashboard.putNumber("TurnToAngle - speed", speed);
+    SmartDashboard.putNumber("TurnToAngle - speed", speed);
 
-  //   if ((Math.abs(err) > 2 || Math.abs(s_Swerve.getYawRate()) > 1) && timer.get() < timeout) {
-  //     s_Swerve.drive(new Translation2d(0, 0), speed, false, true);
-  //   } else {
-  //     complete = true;
-  //   }
-  // }
+    if ((Math.abs(err) > 2 || Math.abs(s_Swerve.getYawRate()) > 1) && timer.get() < timeout) {
+      s_Swerve.drive(new Translation2d(0, 0), speed, false, true);
+    } else {
+      complete = true;
+    }
+  }
 
-  // @Override
-  // public void end(boolean inturrupted) {
-  //   s_Swerve.drive(new Translation2d(0, 0), 0, false, true);
-  //   timer.stop();
-  // }
+  @Override
+  public void end(boolean inturrupted) {
+    s_Swerve.drive(new Translation2d(0, 0), 0, false, true);
+    timer.stop();
+  }
 
-  // @Override
-  // public boolean isFinished() {
-  //   return complete;
-  // }
+  @Override
+  public boolean isFinished() {
+    return complete;
+  }
 }
