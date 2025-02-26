@@ -23,23 +23,6 @@ public class TurnToReefCommand extends Command {
     private Timer timer = new Timer();
     private double timeout;
 
-    private Map<Integer, Integer> angles = new HashMap<Integer, Integer>() {
-        {
-            put(6, 120);
-            put(7, 180);
-            put(8, 240);
-            put(9, 300);
-            put(10, 0);
-            put(11, 60);
-            put(17, 60);
-            put(18, 0);
-            put(19, 300);
-            put(20, 240);
-            put(21, 180);
-            put(22, 120);
-        }
-    };
-
     public TurnToReefCommand(Swerve subsystem, Limelight limeLight, double timeoutS) {
         s_Swerve = subsystem;
         s_Limelight = limeLight;
@@ -54,18 +37,17 @@ public class TurnToReefCommand extends Command {
         timer.reset();
         complete = false;
         int tag = s_Limelight.aprilTagID();
-        boolean exists = angles.containsKey(tag);
+        boolean exists = Constants.Swerve.reefAprilTagAngles.containsKey(tag);
+        System.out.println("LIMELIGHT INITIALIZES: READ " + tag);
         if (exists) {
-            int getAngle = angles.get(tag);
+            int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
             angle = getAngle;
-
-            
         } else {
             complete = true;
         }
 
         SmartDashboard.putNumber("TurnToReef - tag id", tag);
-        SmartDashboard.putNumber("TurnToReef - goal angle", angle);
+        SmartDashboard.putNumber("TurnToReef - goal angle before", angle);
     }
 
     @Override
@@ -74,7 +56,7 @@ public class TurnToReefCommand extends Command {
 
         final double kP = 0.2; // overall speed
         SmartDashboard.putNumber("TurnToReef - gyroAngle", gyroAngle);
-        SmartDashboard.putNumber("TurnToReef - goal angle", angle);
+        SmartDashboard.putNumber("TurnToReef - goal angle after", angle);
 
         SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(angle * 0.5));
         desiredState = OnboardModuleState.optimize(desiredState, Rotation2d.fromDegrees(gyroAngle * 0.5));

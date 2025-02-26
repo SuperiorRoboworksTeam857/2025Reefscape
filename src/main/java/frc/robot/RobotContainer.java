@@ -9,6 +9,7 @@ import frc.robot.autos.ArmAuton;
 import frc.robot.commands.LimelightRead;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
+import frc.robot.commands.TurnToReefCommand;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -73,7 +74,7 @@ public class RobotContainer {
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
   public final Limelight s_Limelight = new Limelight();
-  public final LED s_LED;
+  // public final LED s_LED;
 
 
   /* Autonomous Chooser */
@@ -92,7 +93,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Selector:", autoChooser);
 
     // create the LED subsystem with the boolean supplier
-    s_LED = new LED(s_Intake, () -> robotCentric.getAsBoolean());
+    // s_LED = new LED(s_Intake, () -> robotCentric.getAsBoolean());
 
     // Configure the NamedCommands
     NamedCommands.registerCommand("runIntakeIn", new InstantCommand(() -> s_Intake.intakeGamePiece()));
@@ -131,6 +132,7 @@ public class RobotContainer {
   private void configureBindings() {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
+    new JoystickButton(driverStick, 5).whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, 5000));
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
     // Limelight Controls

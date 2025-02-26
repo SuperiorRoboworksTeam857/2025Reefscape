@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -133,6 +136,23 @@ public final class Constants {
       public static final SwerveModuleConstants constants =
           new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
     }
+
+    public static final Map<Integer, Integer> reefAprilTagAngles = new HashMap<Integer, Integer>() {
+        {
+            put(6, 120);
+            put(7, 180);
+            put(8, 240);
+            put(9, 300);
+            put(10, 0);
+            put(11, 60);
+            put(17, 60);
+            put(18, 0);
+            put(19, 300);
+            put(20, 240);
+            put(21, 180);
+            put(22, 120);
+        }
+    };
   }
 
   public static final class WristConstants {

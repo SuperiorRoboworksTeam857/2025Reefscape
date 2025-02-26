@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
@@ -17,8 +18,26 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("distance to tag", distanceToAprilTagMeters());
+    int tag = aprilTagID();
+    boolean isValid = aprilTagValid();
+
+    SmartDashboard.putBoolean("AprilTag - isValid", isValid);
+    SmartDashboard.putNumber("AprilTag - tag ID", tag);
+    
+
+    if(isValid){
+        double distance = distanceToAprilTagMeters();
+        SmartDashboard.putNumber("AprilTag - distance", distance);
+        if(Constants.Swerve.reefAprilTagAngles.containsKey(tag)){
+          int angleToPointTo = Constants.Swerve.reefAprilTagAngles.get(tag);
+          SmartDashboard.putNumber("TurnToReef - where to turn", angleToPointTo);
+        }else{
+          SmartDashboard.putNumber("TurnToReef - where to turn", -1);
+        }
+    }else{
+        SmartDashboard.putNumber("AprilTag - distance", -1);
+        SmartDashboard.putNumber("TurnToReef - where to turn", -1);
+    }
   }
   public int aprilTagID(){
     var limeLight = getLimelightValue("tid");
