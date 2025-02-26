@@ -38,7 +38,6 @@ public class TurnToReefCommand extends Command {
         complete = false;
         int tag = s_Limelight.aprilTagID();
         boolean exists = Constants.Swerve.reefAprilTagAngles.containsKey(tag);
-        System.out.println("LIMELIGHT INITIALIZES: READ " + tag);
         if (exists) {
             int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
             angle = getAngle;
@@ -47,7 +46,7 @@ public class TurnToReefCommand extends Command {
         }
 
         SmartDashboard.putNumber("TurnToReef - tag id", tag);
-        SmartDashboard.putNumber("TurnToReef - goal angle before", angle);
+        SmartDashboard.putNumber("TurnToReef - goal angle", angle);
     }
 
     @Override
@@ -56,7 +55,6 @@ public class TurnToReefCommand extends Command {
 
         final double kP = 0.2; // overall speed
         SmartDashboard.putNumber("TurnToReef - gyroAngle", gyroAngle);
-        SmartDashboard.putNumber("TurnToReef - goal angle after", angle);
 
         SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(angle * 0.5));
         desiredState = OnboardModuleState.optimize(desiredState, Rotation2d.fromDegrees(gyroAngle * 0.5));
