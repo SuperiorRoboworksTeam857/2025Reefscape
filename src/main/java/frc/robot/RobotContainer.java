@@ -6,11 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.ArmAuton;
+import frc.robot.commands.LimelightRead;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.AlgaeArm.a_Positions;
@@ -70,7 +72,8 @@ public class RobotContainer {
   public final Wrist s_Wrist = new Wrist();
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
-  public final Limelight s_limelight = new Limelight();
+  public final Limelight s_Limelight = new Limelight();
+  public final LED s_LED;
 
 
   /* Autonomous Chooser */
@@ -82,11 +85,14 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
 
-    s_limelight.turnOnDriverCam();
-    s_limelight.enableLimelight(false);
+    s_Limelight.turnOnDriverCam();
+    s_Limelight.enableLimelight(false);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Selector:", autoChooser);
+
+    // create the LED subsystem with the boolean supplier
+    s_LED = new LED(s_Intake, () -> robotCentric.getAsBoolean());
 
     // Configure the NamedCommands
     NamedCommands.registerCommand("runIntakeIn", new InstantCommand(() -> s_Intake.intakeGamePiece()));
@@ -104,6 +110,8 @@ public class RobotContainer {
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean(),
             () -> aligntoReef.getAsBoolean()));
+
+    s_Limelight.setDefaultCommand(new LimelightRead(s_Limelight));
 
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
 
@@ -128,7 +136,7 @@ public class RobotContainer {
     // Limelight Controls
     new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
       new InstantCommand(
-        () -> s_limelight.setPipeline(Limelight.Pipeline.AprilTags)));
+        () -> s_Limelight.setPipeline(Limelight.Pipeline.AprilTags)));
 
     // Elevator
     new POVButton(gamepad, 180).whileTrue(
