@@ -23,6 +23,8 @@ public class TurnToReefCommand extends Command {
     private Timer timer = new Timer();
     private double timeout;
 
+    private static final double maxActivationDistance = 1.5;
+
     public TurnToReefCommand(Swerve subsystem, Limelight limeLight, double timeoutS) {
         s_Swerve = subsystem;
         s_Limelight = limeLight;
@@ -38,7 +40,8 @@ public class TurnToReefCommand extends Command {
         complete = false;
         int tag = s_Limelight.aprilTagID();
         boolean exists = Constants.Swerve.reefAprilTagAngles.containsKey(tag);
-        if (exists) {
+        double distanceAway = s_Limelight.distanceToAprilTagMeters();
+        if (exists && distanceAway < maxActivationDistance) {
             int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
             angle = getAngle;
         } else {

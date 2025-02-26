@@ -19,8 +19,9 @@ public class LED extends SubsystemBase {
 
   // LED Strip Lights:
   // Default Status: Solid Blue (0.83)
-  // Coral in Intake: Blinking Yellow (-0.07)
-  // Robot Centric Mode: Solid Violet (0.91)
+  // Coral in Intake: Blinking Yellow (-0.07) - Need to be green maybe - use screwdriver with dial
+  // Turn to Reef Mode: Solid Violet (0.91)
+  // Not Within Tolerance: Blinking Red (-0.11)
 
   private final Intake s_Intake;
   private final BooleanSupplier isRobotCentric;
