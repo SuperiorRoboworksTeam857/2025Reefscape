@@ -74,6 +74,7 @@ public class RobotContainer {
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
   public final Limelight s_Limelight = new Limelight();
+  // need to uncomment
   // public final LED s_LED;
 
 
@@ -93,6 +94,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Selector:", autoChooser);
 
     // create the LED subsystem with the boolean supplier
+    // will need to uncomment and test
     // s_LED = new LED(s_Intake, () -> robotCentric.getAsBoolean());
 
     // Configure the NamedCommands

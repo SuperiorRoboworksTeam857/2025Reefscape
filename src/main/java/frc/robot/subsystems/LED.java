@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LED extends SubsystemBase {
+  // Ask Chris for the "PWM channel" number (it might not be 0)
   Spark ledStrip = new Spark(0);
 
   // LED Strip Lights:
@@ -26,10 +27,13 @@ public class LED extends SubsystemBase {
   private final Intake s_Intake;
   private final BooleanSupplier isRobotCentric;
 
+  // Change these variables to reflect the values
   public static final double BLUE_LIGHTS = 0.83;
   public static final double STROBE_YELLOW = -0.07;
   public static final double VIOLET_LIGHTS = 0.91;
 
+  // Any subsystems being passed in should have data inside of it
+  // For example, s_Intake.isCoralInIntake().
   public LED(Intake intake, BooleanSupplier robotCentric) {
     // setup each of the subsystems necessary
     this.s_Intake = intake;
@@ -40,6 +44,7 @@ public class LED extends SubsystemBase {
   public void periodic() {
     double lightPattern;
 
+    // You need to add additional if statements below for each LED color
     if (s_Intake.isCoralInIntake()) {
       SmartDashboard.putString("LED - color", "Strobe Yellow");
       lightPattern = STROBE_YELLOW;
