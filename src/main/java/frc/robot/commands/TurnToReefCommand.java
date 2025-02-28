@@ -22,6 +22,12 @@ public class TurnToReefCommand extends Command {
     private double angle;
     private Timer timer = new Timer();
     private double timeout;
+    
+    // TODO
+    // Hold down until it CAN stamp
+    // Give red until it cannot see april tag
+    // Switch angles 180deg
+    // Ensure turning is field centric
 
     private static final double maxActivationDistance = 1.5;
 
@@ -35,6 +41,7 @@ public class TurnToReefCommand extends Command {
 
     @Override
     public void initialize() {
+        s_Limelight.setIsReefAprilTagValid(false);
         timer.reset();
         timer.reset();
         complete = false;
@@ -44,8 +51,10 @@ public class TurnToReefCommand extends Command {
         if (exists && distanceAway < maxActivationDistance) {
             int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
             angle = getAngle;
+            s_Limelight.setIsReefAprilTagValid(true);
         } else {
             complete = true;
+            s_Limelight.setIsReefAprilTagValid(false);
         }
 
         SmartDashboard.putNumber("TurnToReef - tag id", tag);

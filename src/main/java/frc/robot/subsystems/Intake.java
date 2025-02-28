@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -14,12 +15,39 @@ public class Intake extends SubsystemBase {
 
   public Intake() {}
 
+  private boolean intakeHasCoral = false;
+
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Is Coral In Intake?", isCoralInIntake());
+    SmartDashboard.putBoolean("Is Coral In Intake?", intakeHasCoral);
+    SmartDashboard.putBoolean("Is Coral Beam Broken?", hasBeamBreakTriggered());
+
+    // Various operations
+    // 1. Beam Break is Broken
+    // 2. Intake reverses (and says it has coral)
+    // 3. Intake has game piece, but not at beam break. Intake stops
+    // 4. Button outtakes game piece and sets the variable to false
+
+    if(hasBeamBreakTriggered()){
+      if(intakeHasCoral){
+        intakeHoldGamePiece();
+      }
+      intakeHasCoral = true;
+    }else{
+      if(!intakeHasCoral){
+        intakeGamePiece();
+      }else{
+        stopIntake();
+      }
+    }
+
   }
 
-  public boolean isCoralInIntake() {
+  public boolean isCoralInIntake(){
+    return intakeHasCoral;
+  }
+
+  public boolean hasBeamBreakTriggered() {
     return !beamBreak.get();
   }
 
@@ -28,7 +56,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void autoIntake(){
-    if (isCoralInIntake()){
+    if (hasBeamBreakTriggered()){
+      intakeHasCoral = true;
       stopIntake();
     } else {
       runIntake(-1.0);
@@ -39,6 +68,10 @@ public class Intake extends SubsystemBase {
     runIntake(-1.0);
   }
 
+  public void intakeHoldGamePiece(){
+    runIntake(0.5);
+  }
+
   public void reverseIntake(){
     runIntake(3.0);
   }
@@ -46,6 +79,7 @@ public class Intake extends SubsystemBase {
   // TODO: make aware of L4 because outtaking is normally same as intaking except at L4 wrist position
   public void outtakeGamePiece() {
     runIntake(-1.0);
+    intakeHasCoral = false;
   }
 
   public void stopIntake() {

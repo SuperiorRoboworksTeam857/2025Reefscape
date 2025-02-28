@@ -74,8 +74,7 @@ public class RobotContainer {
   public final Intake s_Intake = new Intake();
   public final AlgaeArm s_Arm = new AlgaeArm();
   public final Limelight s_Limelight = new Limelight();
-  // need to uncomment
-  // public final LED s_LED;
+  public final LED s_LED;
 
 
   /* Autonomous Chooser */
@@ -95,7 +94,7 @@ public class RobotContainer {
 
     // create the LED subsystem with the boolean supplier
     // will need to uncomment and test
-    // s_LED = new LED(s_Intake, () -> robotCentric.getAsBoolean());
+    s_LED = new LED(s_Intake, s_Limelight, () -> aligntoReef.getAsBoolean());
 
     // Configure the NamedCommands
     NamedCommands.registerCommand("runIntakeIn", new InstantCommand(() -> s_Intake.intakeGamePiece()));
@@ -116,7 +115,7 @@ public class RobotContainer {
 
     s_Limelight.setDefaultCommand(new LimelightRead(s_Limelight));
 
-    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
+    // s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
 
     // Configure the trigger bindings
     configureBindings();
