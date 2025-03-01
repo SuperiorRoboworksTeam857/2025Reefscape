@@ -4,11 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.autos.ArmAuton;
 import frc.robot.commands.LimelightRead;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TurnToAngleCommand;
 import frc.robot.commands.TurnToReefCommand;
 import frc.robot.subsystems.AlgaeArm;
 import frc.robot.subsystems.Elevator;
@@ -16,24 +13,23 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.AlgaeArm.a_Positions;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
 import frc.robot.subsystems.Limelight;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -71,14 +67,10 @@ public class RobotContainer {
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
   public final Wrist s_Wrist = new Wrist();
-  public final Intake s_Intake = new Intake();
+  public final Intake s_Intake = new Intake(s_Wrist);
   public final AlgaeArm s_Arm = new AlgaeArm();
   public final Limelight s_Limelight = new Limelight();
   public final LED s_LED;
-
-
-  /* Autonomous Chooser */
-  private final SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -88,18 +80,52 @@ public class RobotContainer {
 
     s_Limelight.turnOnDriverCam();
     s_Limelight.enableLimelight(false);
+    s_Limelight.setPipeline(Limelight.Pipeline.AprilTags);
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Selector:", autoChooser);
+    s_Elevator.openCageGrabber();
 
-    // create the LED subsystem with the boolean supplier
-    // will need to uncomment and test
     s_LED = new LED(s_Intake, s_Limelight, () -> aligntoReef.getAsBoolean());
 
     // Configure the NamedCommands
-    NamedCommands.registerCommand("runIntakeIn", new InstantCommand(() -> s_Intake.intakeGamePiece()));
+    NamedCommands.registerCommand("scoreCoral",
+      new ParallelRaceGroup(
+        new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake),
+        new WaitCommand(1)
+      )
+    );
+    
+    NamedCommands.registerCommand("lowerElevator",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator),
+        new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
+      )
+    );
+    NamedCommands.registerCommand("elevatorL2",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator),
+        new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
+      )
+    );
+    NamedCommands.registerCommand("elevatorL3_L4",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator),
+        new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
+      )
+    );
 
-    NamedCommands.registerCommand("runIntakeOut", new InstantCommand(() -> s_Intake.outtakeGamePiece()));
+    NamedCommands.registerCommand("wristIntake",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.INTAKE),s_Wrist),
+        new WaitUntilCommand(s_Wrist::isWristAtGoal)
+      )
+    );
+    NamedCommands.registerCommand("wristL4",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist),
+        new WaitUntilCommand(s_Wrist::isWristAtGoal)
+      )
+    );
+
 
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
@@ -115,7 +141,7 @@ public class RobotContainer {
 
     s_Limelight.setDefaultCommand(new LimelightRead(s_Limelight));
 
-    // s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
+    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.autoIntake(), s_Intake));
 
     // Configure the trigger bindings
     configureBindings();
@@ -133,7 +159,12 @@ public class RobotContainer {
   private void configureBindings() {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    new JoystickButton(driverStick, 5).whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, 5000));
+    // aligntoReef.whileTrue(
+    //   new RepeatCommand(
+    //     new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000)
+    //   )
+    // );
+    aligntoReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
     new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
     // Limelight Controls
@@ -198,16 +229,16 @@ public class RobotContainer {
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-    new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
-    //Algea Arm
-    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
-    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
-    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
+    new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
+    new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
+    //Algae Arm
+    // new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
+    // new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
+    // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
 
 
     // Intake
-    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.intakeGamePiece(), s_Intake));
+    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
     new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
   }
     
@@ -219,41 +250,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     if (buttonBox.getRawButton(3)){
-      return new PathPlannerAuto("Straight Line");
+      return new PathPlannerAuto("L4 Center");
     }
-    // if (buttonBox.getRawButton(3) && buttonBox.getRawButton(4) && buttonBox.getRawButton(5) &&
-    //     buttonBox.getRawButton(6) && buttonBox.getRawButton(7)) {
-    //   return new PathPlannerAuto("4 note center at distance amp first");
-    // } else if (buttonBox.getRawButton(3) && buttonBox.getRawButton(4) && buttonBox.getRawButton(5) &&
-    //            buttonBox.getRawButton(6)) {
-    //   return new PathPlannerAuto("4 note center at distance source first");
-    // } else if (buttonBox.getRawButton(3)) {
-    //   return new PathPlannerAuto("2 note center");
-    // } else {
-    //   if (buttonBox.getRawButton(4)) {
-    //     // amp side
-    //     if (buttonBox.getRawButton(5)) {
-    //       return new PathPlannerAuto("2 note amp side");
-    //     } else if (buttonBox.getRawButton(6)) {
-    //       return new PathPlannerAuto("3 note center amp side");
-    //     } else if (buttonBox.getRawButton(7)) {
-    //       return new PathPlannerAuto("2 note amp side straight to centerline");
-    //     }
-    //   } else {
-    //     // source side
-    //     if (buttonBox.getRawButton(5)) {
-    //       return new PathPlannerAuto("2 note source side");
-    //     } else if (buttonBox.getRawButton(6)) {
-    //       return new PathPlannerAuto("3 note center source side");
-    //     } else if (buttonBox.getRawButton(7)) {
-    //       return new PathPlannerAuto("2 note source side straight to centerline");
-    //     }
-    //   }
-    // }
 
-    // return new PathPlannerAuto("just shoot");
-
-    // Use the autoChooser to choose an autonomous
-    return autoChooser.getSelected();
+    return new PathPlannerAuto("Leave Auto");
   }
 }
