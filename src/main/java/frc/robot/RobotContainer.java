@@ -103,12 +103,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("elevatorL2",
       new SequentialCommandGroup(
         new InstantCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2), s_Elevator),
+        new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist),
         new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
       )
     );
     NamedCommands.registerCommand("elevatorL3_L4",
       new SequentialCommandGroup(
         new InstantCommand(() -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3), s_Elevator),
+        new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist),
         new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
       )
     );
@@ -250,7 +252,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     if (buttonBox.getRawButton(3)){
+      return new PathPlannerAuto("L2 Left");
+    } else if (buttonBox.getRawButton(4)){
       return new PathPlannerAuto("L4 Center");
+    } else if (buttonBox.getRawButton(5)){
+      return new PathPlannerAuto("L2 Right");
     }
 
     return new PathPlannerAuto("Leave Auto");
