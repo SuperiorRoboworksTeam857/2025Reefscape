@@ -27,7 +27,7 @@ public class LED extends SubsystemBase {
 
   private final Intake s_Intake;
   private final Limelight s_Limelight;
-  private final BooleanSupplier isRobotCentric;
+  private final BooleanSupplier isAligningToReef;
 
   // Change these variables to reflect the values
   public static final double BLUE_LIGHTS = 0.83;
@@ -37,10 +37,10 @@ public class LED extends SubsystemBase {
 
   // Any subsystems being passed in should have data inside of it
   // For example, s_Intake.isCoralInIntake().
-  public LED(Intake intake, Limelight limelight, BooleanSupplier robotCentric) {
+  public LED(Intake intake, Limelight limelight, BooleanSupplier aligningToReef) {
     // setup each of the subsystems necessary
     this.s_Intake = intake;
-    this.isRobotCentric = robotCentric;
+    this.isAligningToReef = aligningToReef;
     this.s_Limelight = limelight;
   }
 
@@ -51,11 +51,7 @@ public class LED extends SubsystemBase {
     SmartDashboard.putBoolean("LED - isReefAprilTagValid", s_Limelight.getIsReefAprilTagValid());
 
     // You need to add additional if statements below for each LED color
-    if (s_Intake.isCoralInIntake()) {
-      SmartDashboard.putString("LED - color", "Strobe Green");
-      lightPattern = STROBE_GREEN;
-    } else if (isRobotCentric.getAsBoolean()) {
-
+    if (isAligningToReef.getAsBoolean()) {
       if (s_Limelight.getIsReefAprilTagValid()) {
         SmartDashboard.putString("LED - color", "Solid Violet");
         lightPattern = VIOLET_LIGHTS;
@@ -63,7 +59,9 @@ public class LED extends SubsystemBase {
         SmartDashboard.putString("LED - color", "Strobe Red");
         lightPattern = STROBE_RED;
       }
-
+    } else if (s_Intake.isCoralInIntake()) {
+      SmartDashboard.putString("LED - color", "Strobe Green");
+      lightPattern = STROBE_GREEN;
     } else {
       SmartDashboard.putString("LED - color", "Solid Blue");
       lightPattern = BLUE_LIGHTS;
