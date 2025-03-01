@@ -13,14 +13,19 @@ public class Intake extends SubsystemBase {
 
   private DigitalInput beamBreak = new DigitalInput(IntakeConstants.beamBreak);
 
-  public Intake() {}
+  private final Wrist s_Wrist;
 
-  private boolean intakeHasCoral = false;
+
+  public Intake(Wrist wrist) {
+    this.s_Wrist = wrist;
+  }
+
+ // private boolean intakeHasCoral = false;
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Is Coral In Intake?", intakeHasCoral);
-    SmartDashboard.putBoolean("Is Coral Beam Broken?", hasBeamBreakTriggered());
+    SmartDashboard.putBoolean("Is Coral In Intake?", isCoralInIntake());
+    //SmartDashboard.putBoolean("Is Coral Beam Broken?", hasBeamBreakTriggered());
 
     // Various operations
     // 1. Beam Break is Broken
@@ -28,26 +33,22 @@ public class Intake extends SubsystemBase {
     // 3. Intake has game piece, but not at beam break. Intake stops
     // 4. Button outtakes game piece and sets the variable to false
 
-    if(hasBeamBreakTriggered()){
-      if(intakeHasCoral){
-        intakeHoldGamePiece();
-      }
-      intakeHasCoral = true;
-    }else{
-      if(!intakeHasCoral){
-        intakeGamePiece();
-      }else{
-        stopIntake();
-      }
-    }
+    // if(hasBeamBreakTriggered()){
+    //   if(intakeHasCoral){
+    //     intakeHoldGamePiece();
+    //   }
+    //   intakeHasCoral = true;
+    // }else{
+    //   if(!intakeHasCoral){
+    //     intakeGamePiece();
+    //   }else{
+    //     stopIntake();
+    //   }
+    // }
 
   }
 
   public boolean isCoralInIntake(){
-    return intakeHasCoral;
-  }
-
-  public boolean hasBeamBreakTriggered() {
     return !beamBreak.get();
   }
 
@@ -56,8 +57,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void autoIntake(){
-    if (hasBeamBreakTriggered()){
-      intakeHasCoral = true;
+    if (isCoralInIntake()){
+      //intakeHasCoral = true;
       stopIntake();
     } else {
       runIntake(-1.0);
@@ -73,13 +74,14 @@ public class Intake extends SubsystemBase {
   }
 
   public void reverseIntake(){
-    runIntake(3.0);
+    double intakeSpeed = s_Wrist.invertIntake() ? -5.0 : 5.0;
+    runIntake(intakeSpeed);
   }
 
-  // TODO: make aware of L4 because outtaking is normally same as intaking except at L4 wrist position
   public void outtakeGamePiece() {
-    runIntake(-1.0);
-    intakeHasCoral = false;
+    double intakeSpeed = s_Wrist.invertIntake() ? 1.0 : -1.0;
+    runIntake(intakeSpeed);
+    //intakeHasCoral = false;
   }
 
   public void stopIntake() {
