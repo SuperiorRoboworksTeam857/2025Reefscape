@@ -20,9 +20,9 @@ public class Wrist extends SubsystemBase {
   private final AbsoluteEncoder m_absoluteEncoder;
 
   private static final double wristL2L3 = 0.78;
-  private static final double wristL4 = 0.25;//0.17
+  private static final double wristL4 = 0.22;//0.17
   private static final double intake = 0.74;
-  private static final double climbAngle = 0.3;
+  private static final double climbAngle = 0.25;
   
   public enum w_Positions {
     WRIST_L2_L3,
@@ -82,15 +82,15 @@ public class Wrist extends SubsystemBase {
   }
 
   public boolean isWristAtGoal() {
-    return Math.abs(m_absoluteEncoder.getPosition() - m_goalAngle) < 0.03;
+    return Math.abs(m_absoluteEncoder.getPosition() - m_goalAngle) < 0.015;
   }
 
   public w_Positions getIntendedPosition(){
     return targetPosition;
   }
 
-  public int invertIntake(){
-    return (targetPosition == w_Positions.WRIST_L4) ? -1 : 1;
+  public boolean invertIntake(){
+    return (targetPosition == w_Positions.WRIST_L4) ? true : false;
   }
 
   public void resetEncoders() {
