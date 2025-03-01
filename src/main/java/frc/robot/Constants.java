@@ -24,7 +24,7 @@ import frc.lib.config.SwerveModuleConstants;
  */
 public final class Constants {
   public static final class Swerve {
-    public static final double fastDriveSpeedMultiplier = 1.0; // NEEDS TO BE CHANGED
+    public static final double fastDriveSpeedMultiplier = 1.1; // NEEDS TO BE CHANGED
     public static final double normalDriveSpeedMultiplier = 0.7; // NEEDS TO BE CHANGED
     public static final double slowDriveSpeedMultiplier = 0.25; // NEEDS TO BE CHANGED
 
@@ -145,12 +145,12 @@ public final class Constants {
             put(9, 300);
             put(10, 0);
             put(11, 60);
-            put(17, 60);
-            put(18, 0);
-            put(19, 300);
-            put(20, 240);
-            put(21, 180);
-            put(22, 120);
+            put(17, 240);
+            put(18, 180);
+            put(19, 120);
+            put(20, 60);
+            put(21, 0);
+            put(22, 300);
         }
     };
   }
