@@ -80,9 +80,9 @@ public class Elevator extends SubsystemBase {
           servoLeft.set(ElevatorConstants.servoLeftPressed);
           servoRight.set(ElevatorConstants.servoRightPressed);
 
-          m_controller_left.setGoal(ElevatorConstants.elevatorMotorInverse * -m_goalPosition);
+          m_controller_left.setGoal(-m_goalPosition);
           motorLeft.set(m_controller_left.calculate(motorLeft.getEncoder().getPosition()));
-          m_controller_right.setGoal(ElevatorConstants.elevatorMotorInverse * m_goalPosition);
+          m_controller_right.setGoal(m_goalPosition);
           motorRight.set(m_controller_right.calculate(motorRight.getEncoder().getPosition()));
           break;
 
@@ -129,11 +129,9 @@ public class Elevator extends SubsystemBase {
       m_OperatingMode = operatingMode;
     }
   
-    // public boolean isElevatorAtGoal() {
-    //   double leftGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse;
-    //   double rightGoal = m_goalPosition*ElevatorConstants.elevatorMotorInverse*-1;
-    //   return (Math.abs(motorLeft.getEncoder().getPosition() - leftGoal) < 1.0) && (Math.abs(motorRight.getEncoder().getPosition()- rightGoal) < 1.0);
-    // }
+    public boolean isElevatorAtGoal() {
+      return Math.abs(motorRight.getEncoder().getPosition() - m_goalPosition) < 1.0;
+    }
   
     // public boolean isElevatorHigh() {
     //   return (Math.abs(motorLeft.getEncoder().getPosition()) > 45) || (Math.abs(motorRight.getEncoder().getPosition()) > 45);
@@ -179,11 +177,11 @@ public class Elevator extends SubsystemBase {
   }
 
 
-  public void closeCageGrabber(){
+  public void openCageGrabber(){
     cageServo.set(ElevatorConstants.cageServoVertical);
   }
 
-  public void openCageGrabber(){
+  public void closeCageGrabber(){
     cageServo.set(ElevatorConstants.cageServoHorizontal);
   }
     /*
