@@ -146,12 +146,5 @@ public class Limelight extends SubsystemBase {
       value = 0;
     }
     setLimelightValue("pipeline", value);
-
-    double[] cropValues = new double[4];
-    cropValues[0] = -1.0;
-    cropValues[1] = 1.0;
-    cropValues[2] = 0.0;
-    cropValues[3] = 1.0;
-    setLimelightArray("crop", cropValues);
   }
 }
