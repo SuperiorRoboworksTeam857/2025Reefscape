@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,9 +20,10 @@ public class TurnToReefCommand extends Command {
     private final Swerve s_Swerve;
     private final Limelight s_Limelight;
     private boolean complete = false;
-    private double angle;
+    private double angle = 0;
     private Timer timer = new Timer();
     private double timeout;
+    private Joystick m_stick;
     
     // TODO
     // Hold down until it CAN stamp
@@ -31,9 +33,10 @@ public class TurnToReefCommand extends Command {
 
     private static final double maxActivationDistance = 1.5;
 
-    public TurnToReefCommand(Swerve subsystem, Limelight limeLight, double timeoutS) {
+    public TurnToReefCommand(Swerve subsystem, Limelight limeLight, Joystick stick, double timeoutS) {
         s_Swerve = subsystem;
         s_Limelight = limeLight;
+        m_stick = stick;
         timeout = timeoutS;
         addRequirements(subsystem);
         addRequirements(limeLight);
@@ -42,7 +45,6 @@ public class TurnToReefCommand extends Command {
     @Override
     public void initialize() {
         s_Limelight.setIsReefAprilTagValid(false);
-        timer.reset();
         timer.reset();
         complete = false;
         int tag = s_Limelight.aprilTagID();
@@ -82,11 +84,14 @@ public class TurnToReefCommand extends Command {
 
         SmartDashboard.putNumber("TurnToReef - speed", speed);
 
-        if ((Math.abs(err) > 2 || Math.abs(s_Swerve.getYawRate()) > 1) && timer.get() < timeout) {
-            s_Swerve.drive(new Translation2d(0, 0), speed, false, true);
-        } else {
-            complete = true;
-        }
+        s_Swerve.drive(new Translation2d(-m_stick.getRawAxis(Joystick.AxisType.kY.value), 
+                                         -m_stick.getRawAxis(Joystick.AxisType.kX.value)), speed, false, true);
+
+        // if ((Math.abs(err) > 2 || Math.abs(s_Swerve.getYawRate()) > 1) && timer.get() < timeout) {
+        //     s_Swerve.drive(new Translation2d(0, 0), speed, false, true);
+        // } else {
+        //     //complete = true;
+        // }
     }
 
     @Override
