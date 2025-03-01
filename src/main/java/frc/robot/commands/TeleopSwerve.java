@@ -37,9 +37,9 @@ public class TeleopSwerve extends Command {
       DoubleSupplier rotationSup,
       BooleanSupplier limelight, // NEEDS TO BE CHECKED
       BooleanSupplier robotCentricSup,
-      BooleanSupplier aligntoReefSup,
       BooleanSupplier slowSpeedSup,
-      BooleanSupplier highSpeedSup) {
+      BooleanSupplier highSpeedSup,
+      BooleanSupplier aligntoReefSup) {
     this.s_Swerve = s_Swerve;
     addRequirements(s_Swerve);
 
