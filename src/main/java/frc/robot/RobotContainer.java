@@ -4,23 +4,13 @@
 
 package frc.robot;
 
-import frc.robot.commands.LimelightRead;
-import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TurnToReefCommand;
-import frc.robot.subsystems.AlgaeArm;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.Wrist.w_Positions;
-import frc.robot.subsystems.Elevator.Positions;
-import frc.robot.subsystems.Limelight;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +24,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.LimelightRead;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TurnToReefCommand;
+import frc.robot.subsystems.AlgaeArm;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Elevator.Positions;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Wrist.w_Positions;
 
 
 /**
@@ -62,6 +64,12 @@ public class RobotContainer {
 
   
   private final JoystickButton aligntoReef = new JoystickButton(driverStick, 5);
+
+  /* Operator Buttons */
+  // new Trigger(() -> gamepad.getRawAxis(XboxController.Axis.kLeftTrigger.value) > 0.5).whileTrue(new RunCommand(() -> AlgaeArm.goToAngle(), AlgaeArm));
+  private final JoystickButton algaeDown = new JoystickButton(gamepad,XboxController.Button.kLeftBumper.value);
+  private final JoystickButton reverseIntake = new JoystickButton(gamepad,XboxController.Button.kRightBumper.value);
+
 
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
@@ -159,6 +167,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // TO DO:
+    // Read through 2024 code on GitHub on Triggers and POV Buttons (POV Buttons = D-Pad Buttons)
+
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     // aligntoReef.whileTrue(
