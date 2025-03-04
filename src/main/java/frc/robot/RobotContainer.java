@@ -63,6 +63,25 @@ public class RobotContainer {
   
   private final JoystickButton aligntoReef = new JoystickButton(driverStick, 5);
 
+  /* Gamepad Buttons */
+  private final POVButton elevatorCoralStation = new POVButton(gamepad, 180);  // d-pad down
+  private final POVButton elevatorL2 = new POVButton(gamepad, 90);  // d-pad right
+  private final POVButton elevatorL3_L4 = new POVButton(gamepad, 270);  // d-pad left
+
+  private final POVButton dumpL4 = new POVButton(gamepad, 0);  // d-pad up
+
+  private final JoystickButton dumpClimb = new JoystickButton(gamepad, XboxController.Button.kY.value);
+
+  private final JoystickButton closeCageGrabber = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
+  private final JoystickButton openCageGrabber = new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value);
+
+  private final JoystickButton lowerAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kA.value);
+  private final JoystickButton horizontalAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kB.value);
+  private final JoystickButton raiseAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kY.value);
+
+  private final JoystickButton reverseIntake = new JoystickButton(gamepad, XboxController.Button.kA.value);
+  private final JoystickButton outtakeCoral = new JoystickButton(gamepad, XboxController.Button.kB.value);
+
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
   public final Elevator s_Elevator = new Elevator();
@@ -91,7 +110,7 @@ public class RobotContainer {
       new ParallelRaceGroup(
         new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake),
         new WaitCommand(1)
-      )
+      ).asProxy()
     );
     
     NamedCommands.registerCommand("lowerElevator",
@@ -161,21 +180,22 @@ public class RobotContainer {
   private void configureBindings() {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
+    // tried to make it scan for tags
     // aligntoReef.whileTrue(
     //   new RepeatCommand(
     //     new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000)
     //   )
     // );
     aligntoReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
-    new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
+    //new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
 
     // Limelight Controls
-    new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
-      new InstantCommand(
-        () -> s_Limelight.setPipeline(Limelight.Pipeline.AprilTags)));
+    // new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
+    //   new InstantCommand(
+    //     () -> s_Limelight.setPipeline(Limelight.Pipeline.AprilTags)));
 
     // Elevator
-    new POVButton(gamepad, 180).whileTrue(
+    elevatorCoralStation.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION),s_Elevator
@@ -185,7 +205,7 @@ public class RobotContainer {
         )
       )
     );
-    new POVButton(gamepad, 90).whileTrue(
+    elevatorL2.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L2),s_Elevator
@@ -195,7 +215,7 @@ public class RobotContainer {
         )
       )
     );
-    new POVButton(gamepad, 270).whileTrue(
+    elevatorL3_L4.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
           () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L3),s_Elevator
@@ -206,42 +226,31 @@ public class RobotContainer {
       )
     );
 
-    // new POVButton(gamepad, 0).whileTrue(
-    //   new SequentialCommandGroup(
-    //     new InstantCommand(
-    //       () -> s_Elevator.goToPosition(Positions.CORAL_STATION_L4),s_Elevator
-    //     ),
-    //     new InstantCommand(
-    //     () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist // THIS SHOULD NOT BE L4
-    //     )
-    //   )
-    // );
-
     // Wrist
-    new POVButton(gamepad, 0).whileTrue(
+    dumpL4.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
         () -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist
         )
       )
     );
-    new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist));
+    dumpClimb.whileTrue(new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist));
 
     // Elevator
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-    new JoystickButton(gamepad, XboxController.Button.kRightBumper.value).whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
-    new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value).whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
+    closeCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
+    openCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
+   
     //Algae Arm
-    // new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
-    // new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
-    // new JoystickButton(gamepad, XboxController.Button.kY.value).whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
-
+    // lowerAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
+    // horizontalAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
+    // raiseAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
 
     // Intake
-    new JoystickButton(gamepad, XboxController.Button.kA.value).whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
-    new JoystickButton(gamepad, XboxController.Button.kB.value).whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
+    reverseIntake.whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
+    outtakeCoral.whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
   }
     
 
@@ -257,8 +266,9 @@ public class RobotContainer {
       return new PathPlannerAuto("L4 Center");
     } else if (buttonBox.getRawButton(5)){
       return new PathPlannerAuto("L2 Right");
+    } else if (buttonBox.getRawButton(6)){
+      return new PathPlannerAuto("test auto");
     }
-
     return new PathPlannerAuto("Leave Auto");
   }
 }
