@@ -17,7 +17,6 @@ import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Wrist.w_Positions;
 import frc.robot.subsystems.Elevator.Positions;
 import frc.robot.subsystems.Limelight;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -79,8 +78,6 @@ public class RobotContainer {
 
   // private final JoystickButton reverseIntake = new JoystickButton(gamepad, XboxController.Button.kA.value);
   // private final JoystickButton outtakeCoral = new JoystickButton(gamepad, XboxController.Button.kB.value);
-
-
 
   private final Trigger newRaiseAlgaeArm = new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftTrigger.value) ) > 0.1);
   private final JoystickButton newLowerAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value);
@@ -275,7 +272,7 @@ public class RobotContainer {
     } else if (buttonBox.getRawButton(5)){
       return new PathPlannerAuto("L2 Right");
     }
-    
+
     return new PathPlannerAuto("Leave Auto");
   }
 }
