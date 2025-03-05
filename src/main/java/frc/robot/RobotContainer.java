@@ -274,9 +274,8 @@ public class RobotContainer {
       return new PathPlannerAuto("L4 Center");
     } else if (buttonBox.getRawButton(5)){
       return new PathPlannerAuto("L2 Right");
-    } else if (buttonBox.getRawButton(6)){
-      return new PathPlannerAuto("test auto");
     }
+    
     return new PathPlannerAuto("Leave Auto");
   }
 }
