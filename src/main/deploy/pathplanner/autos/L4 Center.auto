@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "raiseAlgaeArm"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Straight Line Center"
@@ -38,6 +44,30 @@
           "type": "named",
           "data": {
             "name": "lowerElevator"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center up to reef"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lowerAlgaeArm"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center away from reef"
           }
         }
       ]

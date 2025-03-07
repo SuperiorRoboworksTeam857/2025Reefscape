@@ -20,7 +20,7 @@ public class AlgaeArm extends SubsystemBase {
   SparkMaxConfig config = new SparkMaxConfig();
 
   private static final double raisedPosition = 2.7;
-  private static final double horizontalPosition = 2;
+  private static final double horizontalPosition = 1.8;
   private static final double loweredPosition = 0;
   
   public enum a_Positions {

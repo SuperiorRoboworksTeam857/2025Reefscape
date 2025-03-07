@@ -154,6 +154,18 @@ public class RobotContainer {
     );
 
 
+    NamedCommands.registerCommand("lowerAlgaeArm",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm)
+      )
+    );
+
+    NamedCommands.registerCommand("raiseAlgaeArm",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm)
+      )
+    );
+
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
