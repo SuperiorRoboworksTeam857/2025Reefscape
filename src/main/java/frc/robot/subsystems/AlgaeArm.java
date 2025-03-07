@@ -37,7 +37,7 @@ public class AlgaeArm extends SubsystemBase {
   private final ProfiledPIDController m_controller =
       new ProfiledPIDController(0.15, 0.0, 0.0, m_constraints, deltaTime);
 
-  private double m_goalAngle = loweredPosition;
+  private a_Positions goalPosition = a_Positions.LOWERED;
 
   public AlgaeArm() {
     double gearRatio = 25;
@@ -52,24 +52,44 @@ public class AlgaeArm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_controller.setGoal(m_goalAngle);
+    double goalAngle = loweredPosition;
+
+    switch (goalPosition) {
+      case LOWERED:
+        goalAngle = loweredPosition;
+        break;
+      case HORIZONTAL:
+        goalAngle = horizontalPosition;
+        break;
+      case RAISED:
+        goalAngle = raisedPosition;
+        break;
+    }
+
+    m_controller.setGoal(goalAngle);
     motor.set(m_controller.calculate(motor.getEncoder().getPosition()));
 
     SmartDashboard.putNumber("arm position", motor.getEncoder().getPosition());
-    SmartDashboard.putNumber("arm goal position", m_goalAngle);
+    SmartDashboard.putNumber("arm goal position", goalAngle);
   }
 
   public void goToAngle(a_Positions position) {
-    switch (position) {
-      case LOWERED:
-        m_goalAngle = loweredPosition;
-        break;
-      case HORIZONTAL:
-        m_goalAngle = horizontalPosition;
-        break;
-      case RAISED:
-        m_goalAngle = raisedPosition;
-        break;
+    goalPosition = position;
+  }
+
+  public void incrementHeight() {
+    if (goalPosition == a_Positions.LOWERED) {
+      goalPosition = a_Positions.HORIZONTAL;
+    } else if (goalPosition == a_Positions.HORIZONTAL) {
+      goalPosition = a_Positions.RAISED;
+    }
+  }
+
+  public void decrementHeight() {
+    if (goalPosition == a_Positions.RAISED) {
+      goalPosition = a_Positions.HORIZONTAL;
+    } else if (goalPosition == a_Positions.HORIZONTAL) {
+      goalPosition = a_Positions.LOWERED;
     }
   }
 

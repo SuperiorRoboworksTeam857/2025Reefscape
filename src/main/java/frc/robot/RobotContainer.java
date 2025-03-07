@@ -248,10 +248,8 @@ public class RobotContainer {
     newCloseCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
     newOpenCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
    
-    //Algae Arm
-    newLowerAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.LOWERED), s_Arm));
-    //horizontalAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.HORIZONTAL), s_Arm));
-    newRaiseAlgaeArm.whileTrue(new RunCommand(() -> s_Arm.goToAngle(a_Positions.RAISED), s_Arm));
+    newLowerAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.decrementHeight(), s_Arm));
+    newRaiseAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.incrementHeight(), s_Arm));
 
     // Intake
     newReverseIntake.whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
