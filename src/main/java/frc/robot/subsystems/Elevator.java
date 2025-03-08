@@ -46,6 +46,7 @@ public class Elevator extends SubsystemBase {
       CORAL_STATION_L4,
       HUMANPLAYER_STATION,
       IDLE_MODE,
+      L1
     }
   
     private double m_goalPosition = 0;
@@ -121,6 +122,9 @@ public class Elevator extends SubsystemBase {
           break;
         case CORAL_STATION_L4:
           m_goalPosition = 29;
+          break;
+        case L1:
+          m_goalPosition = 4.2;
           break;
       }
     }
