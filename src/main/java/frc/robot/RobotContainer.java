@@ -68,8 +68,9 @@ public class RobotContainer {
   private final POVButton elevatorL2 = new POVButton(gamepad, 180);  // d-pad down
   private final POVButton elevatorL3_L4 = new POVButton(gamepad, 90);  // d-pad right
 
-  private final JoystickButton elevatorL1 = new JoystickButton(gamepad, XboxController.Button.kX.value);
+  //private final JoystickButton elevatorL1 = new JoystickButton(gamepad, XboxController.Button.kX.value);
 
+  private final JoystickButton dumpClimb = new JoystickButton(gamepad, XboxController.Button.kY.value);
   private final POVButton dumpL4 = new POVButton(gamepad, 0);  // d-pad up
 
   // private final JoystickButton closeCageGrabber = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
@@ -266,18 +267,25 @@ public class RobotContainer {
       )
     );
 
-    elevatorL1.whileTrue(
+    // elevatorL1.whileTrue(
+    //   new SequentialCommandGroup(
+    //     new InstantCommand(
+    //       () -> s_Elevator.goToPosition(Positions.L1),s_Elevator
+    //     ),
+    //     new InstantCommand(
+    //     () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
+    //     )
+    //   )
+    // );
+
+    // Wrist
+    dumpClimb.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
-          () -> s_Elevator.goToPosition(Positions.L1),s_Elevator
-        ),
-        new InstantCommand(
-        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
+        () -> s_Wrist.goToAngle(w_Positions.CLIMB_FINAL),s_Wrist
         )
       )
     );
-
-    // Wrist
     dumpL4.whileTrue(
       new SequentialCommandGroup(
         new InstantCommand(
