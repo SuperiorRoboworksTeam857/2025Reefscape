@@ -21,6 +21,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -67,6 +68,8 @@ public class RobotContainer {
   private final POVButton elevatorL2 = new POVButton(gamepad, 180);  // d-pad down
   private final POVButton elevatorL3_L4 = new POVButton(gamepad, 90);  // d-pad right
 
+  private final JoystickButton elevatorL1 = new JoystickButton(gamepad, XboxController.Button.kX.value);
+
   private final POVButton dumpL4 = new POVButton(gamepad, 0);  // d-pad up
 
   // private final JoystickButton closeCageGrabber = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
@@ -86,7 +89,9 @@ public class RobotContainer {
   private final JoystickButton newReverseIntake = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
 
   private final JoystickButton newCloseCageGrabber = new JoystickButton(gamepad, XboxController.Button.kA.value);
-  private final JoystickButton newOpenCageGrabber = new JoystickButton(gamepad, XboxController.Button.kB.value);  
+  private final JoystickButton newOpenCageGrabber = new JoystickButton(gamepad, XboxController.Button.kB.value);
+
+  
 
   /* Subsystems */
   public final Swerve s_Swerve = new Swerve();
@@ -107,7 +112,7 @@ public class RobotContainer {
     s_Limelight.enableLimelight(false);
     s_Limelight.setPipeline(Limelight.Pipeline.AprilTags);
 
-    s_Elevator.openCageGrabber();
+    s_Elevator.closeCageGrabber();
 
     s_LED = new LED(s_Intake, s_Limelight, () -> aligntoReef.getAsBoolean());
 
@@ -122,6 +127,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("lowerElevator",
       new SequentialCommandGroup(
         new InstantCommand(() -> s_Elevator.goToPosition(Positions.HUMANPLAYER_STATION), s_Elevator),
+        new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
+      )
+    );
+    NamedCommands.registerCommand("elevatorL1",
+      new SequentialCommandGroup(
+        new InstantCommand(() -> s_Elevator.goToPosition(Positions.L1), s_Elevator),
+        new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist),
         new WaitUntilCommand(s_Elevator::isElevatorAtGoal)
       )
     );
@@ -166,6 +178,16 @@ public class RobotContainer {
       )
     );
 
+    NamedCommands.registerCommand("driveForwardRobotCentric",
+      new RunCommand(() -> s_Swerve.drive(new Translation2d(0.2, 0).times(Constants.Swerve.maxSpeed), 0, false, true))
+    );
+    NamedCommands.registerCommand("driveRightRobotCentric",
+      new RunCommand(() -> s_Swerve.drive(new Translation2d(0, -0.2).times(Constants.Swerve.maxSpeed), 0, false, true))
+    );
+    NamedCommands.registerCommand("stopDriving",
+      new InstantCommand(() -> s_Swerve.drive(new Translation2d(0, 0).times(Constants.Swerve.maxSpeed), 0, false, true))
+    );  
+    
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
             s_Swerve,
@@ -244,6 +266,17 @@ public class RobotContainer {
       )
     );
 
+    elevatorL1.whileTrue(
+      new SequentialCommandGroup(
+        new InstantCommand(
+          () -> s_Elevator.goToPosition(Positions.L1),s_Elevator
+        ),
+        new InstantCommand(
+        () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
+        )
+      )
+    );
+
     // Wrist
     dumpL4.whileTrue(
       new SequentialCommandGroup(
@@ -275,12 +308,22 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    if (buttonBox.getRawButton(3)){
-      return new PathPlannerAuto("L2 Left");
-    } else if (buttonBox.getRawButton(4)){
-      return new PathPlannerAuto("L4 Center");
-    } else if (buttonBox.getRawButton(5)){
-      return new PathPlannerAuto("L2 Right");
+    if(buttonBox.getRawButton(6)) {
+      if (buttonBox.getRawButton(3)){
+        return new PathPlannerAuto("L1 Left");
+      } else if (buttonBox.getRawButton(4)){
+        return new PathPlannerAuto("L1 Center");
+      } else if (buttonBox.getRawButton(5)){
+        return new PathPlannerAuto("L1 Right");
+      }
+    } else {
+      if (buttonBox.getRawButton(3)){
+        return new PathPlannerAuto("L2 Left");
+      } else if (buttonBox.getRawButton(4)){
+        return new PathPlannerAuto("L4 Center");
+      } else if (buttonBox.getRawButton(5)){
+        return new PathPlannerAuto("L2 Right");
+      }
     }
 
     return new PathPlannerAuto("Leave Auto");
