@@ -44,22 +44,26 @@ public class TurnToReefCommand extends Command {
 
     @Override
     public void initialize() {
-        s_Limelight.setIsReefAprilTagValid(false);
-        timer.reset();
+        // s_Limelight.setIsReefAprilTagValid(false);
+        // timer.reset();
         complete = false;
-        int tag = s_Limelight.aprilTagID();
-        boolean exists = Constants.Swerve.reefAprilTagAngles.containsKey(tag);
-        double distanceAway = s_Limelight.distanceToAprilTagMeters();
-        if (exists && distanceAway < maxActivationDistance) {
-            int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
-            angle = getAngle;
-            s_Limelight.setIsReefAprilTagValid(true);
-        } else {
-            complete = true;
-            s_Limelight.setIsReefAprilTagValid(false);
-        }
+        // int tag = s_Limelight.aprilTagID();
+        // boolean exists = Constants.Swerve.reefAprilTagAngles.containsKey(tag);
+        // double distanceAway = s_Limelight.distanceToAprilTagMeters();
+        // if (exists && distanceAway < maxActivationDistance) {
+        //     int getAngle = Constants.Swerve.reefAprilTagAngles.get(tag);
+        //     angle = getAngle;
+        //     s_Limelight.setIsReefAprilTagValid(true);
+        // } else {
+        //     complete = true;
+        //     s_Limelight.setIsReefAprilTagValid(false);
+        // }
 
-        SmartDashboard.putNumber("TurnToReef - tag id", tag);
+        double gyroAngle = s_Swerve.getYaw().getDegrees();
+        angle = 60 * Math.round(gyroAngle / 60.0);
+
+
+        // SmartDashboard.putNumber("TurnToReef - tag id", tag);
         SmartDashboard.putNumber("TurnToReef - goal angle", angle);
     }
 
