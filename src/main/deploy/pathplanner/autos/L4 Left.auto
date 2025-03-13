@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "L4 LeftSideToReefBackLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorL3_L4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 LeftSideToReefBackLeft"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorL3_L4"
+                }
+              }
+            ]
           }
         },
         {
