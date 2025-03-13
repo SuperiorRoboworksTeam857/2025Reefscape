@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.85,
-        "y": 5.08
+        "x": 5.035,
+        "y": 5.218
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4765393169027785,
-        "y": 6.165197929815111
+        "x": 5.661539316902779,
+        "y": 6.303197929815111
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 7.2
       },
       "prevControl": {
-        "x": 1.9451617772136698,
+        "x": 1.9451617772136696,
         "y": 6.278613493846098
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Coral Station"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 125.00000000000001
   },
   "reversed": false,
-  "folder": null,
+  "folder": "L2 Left",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 59.99999999999999

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.181,
-        "y": 1.9810963114754099
+        "x": 1.3,
+        "y": 7.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.181,
-        "y": 1.98109631147541
+        "x": 2.023136060897356,
+        "y": 6.338200001491151
       },
       "isLocked": false,
-      "linkedName": "Right Start"
+      "linkedName": "Left Coral Station"
     },
     {
       "anchor": {
-        "x": 4.982,
-        "y": 2.767
+        "x": 3.560348360655738,
+        "y": 5.241752049180327
       },
       "prevControl": {
-        "x": 5.3615,
-        "y": 2.1096867185276107
+        "x": 2.997945744085545,
+        "y": 6.21586195538958
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -59.99999999999999
+    "velocity": 0.0,
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "L2 Right",
+  "folder": "L4 Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 125.00000000000001
   },
   "useDefaultConstraints": false
 }

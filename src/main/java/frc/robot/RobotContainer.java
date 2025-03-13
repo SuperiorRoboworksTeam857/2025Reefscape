@@ -124,6 +124,10 @@ public class RobotContainer {
         new WaitCommand(1)
       ).asProxy()
     );
+
+    NamedCommands.registerCommand("waitUntilCoralInIntake",
+      new WaitUntilCommand(s_Intake::isCoralInIntake)
+    );
     
     NamedCommands.registerCommand("lowerElevator",
       new SequentialCommandGroup(
@@ -323,6 +327,14 @@ public class RobotContainer {
         return new PathPlannerAuto("L1 Center");
       } else if (buttonBox.getRawButton(5)){
         return new PathPlannerAuto("L1 Right");
+      }
+    } else if(buttonBox.getRawButton(7)) {
+      if (buttonBox.getRawButton(3)){
+        return new PathPlannerAuto("L4 Left");
+      } else if (buttonBox.getRawButton(4)){
+        //
+      } else if (buttonBox.getRawButton(5)){
+        return new PathPlannerAuto("L4 Right");
       }
     } else {
       if (buttonBox.getRawButton(3)){
