@@ -41,15 +41,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "lowerElevator"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center up to reef"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "lowerElevator"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center up to reef"
+                }
+              }
+            ]
           }
         },
         {
