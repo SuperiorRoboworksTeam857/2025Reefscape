@@ -67,6 +67,9 @@ public class Swerve extends SubsystemBase {
     // Set AprilTag offset tracking point (meters)
     LimelightHelpers.setFiducial3DOffset("limelight", 0.0, 0.0, 0.393);
 
+    int[] validIDs = {6,7,8,9,10,11, 17,18,19,20,21,22};
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight", validIDs);
+
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
