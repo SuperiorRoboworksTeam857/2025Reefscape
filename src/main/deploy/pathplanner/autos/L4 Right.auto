@@ -67,9 +67,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "L4 RightCoralStationToReefFrontRight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "L4 RightCoralStationToReefFrontRight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorL3_L4"
+                }
+              }
+            ]
           }
         }
       ]
