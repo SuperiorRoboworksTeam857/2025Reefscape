@@ -39,7 +39,7 @@ public class Swerve extends SubsystemBase {
 
   
 
-  private Field2d field;
+  public Field2d field;
 
   public Swerve() {
     gyro = new AHRS(NavXComType.kMXP_SPI);

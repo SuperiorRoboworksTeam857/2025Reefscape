@@ -29,8 +29,8 @@ public class DriveToL4ScoringLocation extends Command {
     private static final Translation2d BlueReefCenter = new Translation2d(Units.inchesToMeters(176.745), Units.inchesToMeters(158.5));
     private static final Translation2d RedReefCenter = new Translation2d(Units.inchesToMeters(514.13), Units.inchesToMeters(158.5));
 
-    private static final Translation2d LeftPoleAlignment = new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(6.5));
-    private static final Translation2d RightPoleAlignment = new Translation2d(Units.inchesToMeters(6), Units.inchesToMeters(-6.5));
+    private static final Translation2d LeftPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+7), Units.inchesToMeters(-9));
+    private static final Translation2d RightPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+7), Units.inchesToMeters(5.5));
     
     AprilTagFieldLayout m_layout;
 
@@ -46,8 +46,10 @@ public class DriveToL4ScoringLocation extends Command {
         complete = false;
 
         final FieldSector sector = currentFieldSector();
-        
+       
         final int tagID = tagIDForSector(sector);
+
+        SmartDashboard.putNumber("DriveToL4 - tag", tagID);
 
         final var tagPose3D = m_layout.getTagPose(tagID);
 
@@ -59,7 +61,13 @@ public class DriveToL4ScoringLocation extends Command {
 
         final Pose2d tagPose2D = tagPose3D.get().toPose2d();
 
-        m_angle = tagPose2D.getRotation().getDegrees();
+        double angleOffset = 0;
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && (alliance.get() == DriverStation.Alliance.Red)) {
+            angleOffset = 180;
+        }
+         
+        m_angle = tagPose2D.getRotation().getDegrees() + angleOffset;
 
         SmartDashboard.putNumber("DriveToL4 - goal angle", m_angle);
 
@@ -72,7 +80,13 @@ public class DriveToL4ScoringLocation extends Command {
                 alignment = RightPoleAlignment;
                 break;
         }
-        m_targetPose = tagPose2D.plus(new Transform2d(alignment.rotateBy(tagPose2D.getRotation()), Rotation2d.kZero));
+        m_targetPose = tagPose2D.plus(new Transform2d(alignment, Rotation2d.kZero));
+
+        s_Swerve.field.getObject("tag").setPose(tagPose2D);
+        s_Swerve.field.getObject("target").setPose(m_targetPose);
+
+        SmartDashboard.putNumber("DriveToL4 - target pose x", m_targetPose.getX());
+        SmartDashboard.putNumber("DriveToL4 - target pose y", m_targetPose.getY());
         
         
 
@@ -84,7 +98,7 @@ public class DriveToL4ScoringLocation extends Command {
         double gyroAngle = s_Swerve.getYaw().getDegrees();
 
         final double kPTurn = 0.2;
-        final double kPTranslate = 0.2;
+        final double kPTranslate = 2.5;
 
         SmartDashboard.putNumber("DriveToL4 - gyroAngle", gyroAngle);
 
@@ -105,16 +119,23 @@ public class DriveToL4ScoringLocation extends Command {
         double xErr = m_targetPose.getX() - s_Swerve.getPose().getX();
         double xSpeed = MathUtil.clamp(
                 xErr * kPTranslate,
-                -Constants.Swerve.maxSpeed * 0.1,
-                Constants.Swerve.maxSpeed * 0.1);
+                -Constants.Swerve.maxSpeed * 0.5,
+                Constants.Swerve.maxSpeed * 0.5);
         double yErr = m_targetPose.getY() - s_Swerve.getPose().getY();
         double ySpeed = MathUtil.clamp(
                 yErr * kPTranslate,
-                -Constants.Swerve.maxSpeed * 0.1,
-                Constants.Swerve.maxSpeed * 0.1);
+                -Constants.Swerve.maxSpeed * 0.5,
+                Constants.Swerve.maxSpeed * 0.5);
 
         SmartDashboard.putNumber("DriveToL4 - x speed", xSpeed);
         SmartDashboard.putNumber("DriveToL4 - y speed", ySpeed);
+
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && (alliance.get() == DriverStation.Alliance.Red)) {
+            xSpeed = -xSpeed;
+            ySpeed = -ySpeed;
+        }
 
         s_Swerve.drive(new Translation2d(xSpeed, ySpeed), turnSpeed, true, true);
 
@@ -143,15 +164,15 @@ public class DriveToL4ScoringLocation extends Command {
 
         double angleDegrees = Units.radiansToDegrees(angleRadians);
 
-        if (angleDegrees >= -150 || angleDegrees <= -90) {
+        if (angleDegrees >= -150 && angleDegrees <= -90) {
             sector = FieldSector.DOWN_LEFT;
-        } else if (angleDegrees >= -90 || angleDegrees <= -30) {
+        } else if (angleDegrees >= -90 && angleDegrees <= -30) {
             sector = FieldSector.DOWN_RIGHT;
-        } else if (angleDegrees >= -30 || angleDegrees <= 30) {
+        } else if (angleDegrees >= -30 && angleDegrees <= 30) {
             sector = FieldSector.RIGHT;
-        } else if (angleDegrees >= 30 || angleDegrees <= 90) {
+        } else if (angleDegrees >= 30 && angleDegrees <= 90) {
             sector = FieldSector.UP_RIGHT;
-        } else if (angleDegrees >= 90 || angleDegrees <= 150) {
+        } else if (angleDegrees >= 90 && angleDegrees <= 150) {
             sector = FieldSector.UP_LEFT;
         } 
 
