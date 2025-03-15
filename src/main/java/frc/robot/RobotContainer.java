@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.DriveToL4ScoringLocation;
 import frc.robot.commands.LimelightRead;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToReefCommand;
@@ -20,6 +21,8 @@ import frc.robot.subsystems.Limelight;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -60,8 +63,10 @@ public class RobotContainer {
 
   private final JoystickButton slowSpeed = new JoystickButton(driverStick, 2);
   private final JoystickButton highSpeed = new JoystickButton(driverStick,1);
-  
-  private final JoystickButton aligntoReef = new JoystickButton(driverStick, 5);
+
+  private final JoystickButton alignToReef = new JoystickButton(driverStick, 5);
+  private final JoystickButton alignToLeftPole = new JoystickButton(driverStick, 6);
+  private final JoystickButton alignToRightPole = new JoystickButton(driverStick, 7);
 
   /* Gamepad Buttons */
   private final POVButton elevatorCoralStation = new POVButton(gamepad, 270);  // d-pad left
@@ -103,8 +108,13 @@ public class RobotContainer {
   public final Limelight s_Limelight = new Limelight();
   public final LED s_LED;
 
+  public final AprilTagFieldLayout layout;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+
     // Start camera streams for both webcams
     CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
@@ -115,7 +125,7 @@ public class RobotContainer {
 
     s_Elevator.closeCageGrabber();
 
-    s_LED = new LED(s_Intake, s_Limelight, () -> aligntoReef.getAsBoolean());
+    s_LED = new LED(s_Intake, s_Limelight, () -> alignToReef.getAsBoolean());
 
     // Configure the NamedCommands
     NamedCommands.registerCommand("scoreCoral",
@@ -203,7 +213,7 @@ public class RobotContainer {
             () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean(),
             () -> highSpeed.getAsBoolean(),
-            () -> aligntoReef.getAsBoolean()));
+            () -> alignToReef.getAsBoolean()));
 
     s_Limelight.setDefaultCommand(new LimelightRead(s_Limelight));
 
@@ -231,8 +241,10 @@ public class RobotContainer {
     //     new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000)
     //   )
     // );
-    aligntoReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
-    //new JoystickButton(driverStick, 4).whileTrue(new RunCommand(() -> s_Swerve.setX(), s_Swerve));
+    alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
+
+    alignToLeftPole.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_POLE));
+    alignToRightPole.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_POLE));
 
     // Limelight Controls
     // new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
