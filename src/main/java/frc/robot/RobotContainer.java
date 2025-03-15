@@ -359,7 +359,7 @@ public class RobotContainer {
     }
 
     return new ParallelRaceGroup(
-      new RunCommand(() -> s_Swerve.drive(new Translation2d(0.2, 0).times(Constants.Swerve.maxSpeed), 0, false, true)),
+      new RunCommand(() -> s_Swerve.drive(new Translation2d(0.2, 0).times(Constants.Swerve.maxSpeed), 0, false, true), s_Swerve),
       new WaitCommand(1)
     );
   }
