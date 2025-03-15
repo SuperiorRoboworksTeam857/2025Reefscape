@@ -118,7 +118,7 @@ public class Elevator extends SubsystemBase {
           m_goalPosition = 16;
           break;
         case CORAL_STATION_L3:
-          m_goalPosition = 30;
+          m_goalPosition = 30.5;
           break;
         case CORAL_STATION_L4:
           m_goalPosition = 29;
