@@ -19,7 +19,7 @@ public class Wrist extends SubsystemBase {
   SparkMaxConfig config = new SparkMaxConfig();
   private final AbsoluteEncoder m_absoluteEncoder;
 
-  private static final double wristL2L3 = 0.78;
+  private static final double wristL2L3 = 0.776;
   private static final double wristL4 = 0.22;//0.17
   private static final double intake = 0.74;
   private static final double climbAngle = 0.25;
