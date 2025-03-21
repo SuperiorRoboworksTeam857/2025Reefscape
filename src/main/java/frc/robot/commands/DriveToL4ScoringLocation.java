@@ -29,8 +29,8 @@ public class DriveToL4ScoringLocation extends Command {
     private static final Translation2d BlueReefCenter = new Translation2d(Units.inchesToMeters(176.745), Units.inchesToMeters(158.5));
     private static final Translation2d RedReefCenter = new Translation2d(Units.inchesToMeters(514.13), Units.inchesToMeters(158.5));
 
-    private static final Translation2d LeftPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+7), Units.inchesToMeters(-9));
-    private static final Translation2d RightPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+7), Units.inchesToMeters(5.5));
+    private static final Translation2d LeftPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(-7));
+    private static final Translation2d RightPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(5.5));
     
     AprilTagFieldLayout m_layout;
 

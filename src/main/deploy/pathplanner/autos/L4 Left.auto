@@ -24,21 +24,41 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "wristL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "scoreCoral"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "wristIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "driveToL4Right"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wristL4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "scoreCoral"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wristIntake"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {

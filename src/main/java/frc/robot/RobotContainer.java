@@ -201,7 +201,14 @@ public class RobotContainer {
     );
     NamedCommands.registerCommand("stopDriving",
       new InstantCommand(() -> s_Swerve.drive(new Translation2d(0, 0).times(Constants.Swerve.maxSpeed), 0, false, true))
-    );  
+    );
+
+    NamedCommands.registerCommand("driveToL4Left",
+      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_POLE)
+    );
+    NamedCommands.registerCommand("driveToL4Right",
+      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_POLE)
+    );
     
     s_Swerve.setDefaultCommand(
         new TeleopSwerve(
