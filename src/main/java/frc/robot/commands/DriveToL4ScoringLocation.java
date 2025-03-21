@@ -20,18 +20,22 @@ public class DriveToL4ScoringLocation extends Command {
     private boolean complete = false;
     private double m_angle = 0;
     private Pose2d m_targetPose;
-    private Location m_poleLocation = Location.LEFT_POLE;
+    private Location m_poleLocation = Location.LEFT_L4;
 
-    public enum Location {LEFT_POLE, RIGHT_POLE};
+    public enum Location {LEFT_L4, RIGHT_L4, LEFT_L2_L3, RIGHT_L2_L3};
 
     private enum FieldSector {UP_LEFT, LEFT, DOWN_LEFT, UP_RIGHT, RIGHT, DOWN_RIGHT};
 
     private static final Translation2d BlueReefCenter = new Translation2d(Units.inchesToMeters(176.745), Units.inchesToMeters(158.5));
     private static final Translation2d RedReefCenter = new Translation2d(Units.inchesToMeters(514.13), Units.inchesToMeters(158.5));
 
-    private static final Translation2d LeftPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(-7));
-    private static final Translation2d RightPoleAlignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(5.5));
+    private static final Translation2d LeftL4Alignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(-7));
+    private static final Translation2d RightL4Alignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(5.5));
+
+    private static final Translation2d LeftL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75+0), Units.inchesToMeters(-7));
+    private static final Translation2d RightL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75+0), Units.inchesToMeters(5.5));
     
+
     AprilTagFieldLayout m_layout;
 
     public DriveToL4ScoringLocation(Swerve subsystem, AprilTagFieldLayout layout, Location poleLocation) {
@@ -73,11 +77,17 @@ public class DriveToL4ScoringLocation extends Command {
 
         Translation2d alignment = Translation2d.kZero;
         switch (m_poleLocation) {
-            case LEFT_POLE:
-                alignment = LeftPoleAlignment;
+            case LEFT_L4:
+                alignment = LeftL4Alignment;
                 break;
-            case RIGHT_POLE:
-                alignment = RightPoleAlignment;
+            case RIGHT_L4:
+                alignment = RightL4Alignment;
+                break;
+            case LEFT_L2_L3:
+                alignment = LeftL2L3Alignment;
+                break;
+            case RIGHT_L2_L3:
+                alignment = RightL2L3Alignment;
                 break;
         }
         m_targetPose = tagPose2D.plus(new Transform2d(alignment, Rotation2d.kZero));

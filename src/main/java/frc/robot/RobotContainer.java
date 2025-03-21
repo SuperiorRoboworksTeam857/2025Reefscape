@@ -65,9 +65,10 @@ public class RobotContainer {
   private final JoystickButton highSpeed = new JoystickButton(driverStick,1);
 
   private final JoystickButton alignToReef = new JoystickButton(driverStick, 5);
-  private final JoystickButton alignToLeftPole = new JoystickButton(driverStick, 6);
-  private final JoystickButton alignToRightPole = new JoystickButton(driverStick, 7);
-
+  private final JoystickButton alignToLeftPoleL4 = new JoystickButton(driverStick, 6);
+  private final JoystickButton alignToRightPoleL4 = new JoystickButton(driverStick, 7);
+  private final JoystickButton alignToLeftPoleL2L3 = new JoystickButton(driverStick, 9);
+  private final JoystickButton alignToRightPoleL2L3 = new JoystickButton(driverStick, 8);
   /* Gamepad Buttons */
   private final POVButton elevatorCoralStation = new POVButton(gamepad, 270);  // d-pad left
   private final POVButton elevatorL2 = new POVButton(gamepad, 180);  // d-pad down
@@ -204,10 +205,10 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand("driveToL4Left",
-      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_POLE)
+      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L4)
     );
     NamedCommands.registerCommand("driveToL4Right",
-      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_POLE)
+      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L4)
     );
     
     s_Swerve.setDefaultCommand(
@@ -250,8 +251,10 @@ public class RobotContainer {
     // );
     alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
 
-    alignToLeftPole.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_POLE));
-    alignToRightPole.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_POLE));
+    alignToLeftPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L4));
+    alignToRightPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L4));
+    alignToLeftPoleL2L3.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L2_L3));
+    alignToRightPoleL2L3.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L2_L3));
 
     // Limelight Controls
     // new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
