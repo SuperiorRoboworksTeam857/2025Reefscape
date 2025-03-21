@@ -288,7 +288,9 @@ public class Swerve extends SubsystemBase {
     if (Math.abs(gyro.getRate()) > 360) {
       doRejectUpdate = true;
     }
-    if (mt2.tagCount == 0) {
+    if (mt2 == null) {
+      doRejectUpdate = true;
+    } else if (mt2.tagCount == 0) {
       doRejectUpdate = true;
     }
     if (!doRejectUpdate) {
