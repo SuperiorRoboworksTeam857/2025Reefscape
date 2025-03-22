@@ -32,8 +32,8 @@ public class DriveToL4ScoringLocation extends Command {
     private static final Translation2d LeftL4Alignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(-7));
     private static final Translation2d RightL4Alignment = new Translation2d(Units.inchesToMeters(16.75+8.2), Units.inchesToMeters(5.5));
 
-    private static final Translation2d LeftL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75+0), Units.inchesToMeters(-7));
-    private static final Translation2d RightL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75+0), Units.inchesToMeters(5.5));
+    private static final Translation2d LeftL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75-0.5), Units.inchesToMeters(-7));
+    private static final Translation2d RightL2L3Alignment = new Translation2d(Units.inchesToMeters(16.75-0.5), Units.inchesToMeters(5.5));
     
 
     AprilTagFieldLayout m_layout;
