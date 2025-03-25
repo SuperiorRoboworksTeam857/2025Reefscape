@@ -39,7 +39,6 @@ public class Elevator extends SubsystemBase {
 
     Servo cageServo = new Servo(ElevatorConstants.cageGrabberServo);
   
-    // Range of motion of 0 inches at bottom to -24.5 inches at top
     public enum Positions {
       CORAL_STATION_L2,
       CORAL_STATION_L3,
