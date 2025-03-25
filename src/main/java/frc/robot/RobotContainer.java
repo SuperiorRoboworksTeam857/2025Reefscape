@@ -231,23 +231,12 @@ public class RobotContainer {
   private void configureBindings() {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-    // tried to make it scan for tags
-    // aligntoReef.whileTrue(
-    //   new RepeatCommand(
-    //     new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000)
-    //   )
-    // );
     alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, driverStick));
 
     alignToLeftPoleL4.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.LEFT_L4));
     alignToRightPoleL4.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.RIGHT_L4));
     alignToLeftPoleL2L3.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.LEFT_L2_L3));
     alignToRightPoleL2L3.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.RIGHT_L2_L3));
-
-    // Limelight Controls
-    // new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
-    //   new InstantCommand(
-    //     () -> s_Limelight.setPipeline(Limelight.Pipeline.AprilTags)));
 
     // Elevator
     elevatorCoralStation.whileTrue(
@@ -280,17 +269,6 @@ public class RobotContainer {
         )
       )
     );
-
-    // elevatorL1.whileTrue(
-    //   new SequentialCommandGroup(
-    //     new InstantCommand(
-    //       () -> s_Elevator.goToPosition(Positions.L1),s_Elevator
-    //     ),
-    //     new InstantCommand(
-    //     () -> s_Wrist.goToAngle(w_Positions.WRIST_L2_L3),s_Wrist
-    //     )
-    //   )
-    // );
 
     // Wrist
     dumpClimb.whileTrue(
