@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
@@ -20,7 +19,6 @@ public class TeleopSwerve extends Command {
   private DoubleSupplier translationSup;
   private DoubleSupplier strafeSup;
   private DoubleSupplier rotationSup;
-  private BooleanSupplier limelight; // NEEDS TO BE CHECKED
   private BooleanSupplier robotCentricSup;
   private BooleanSupplier slowSpeedSup;
   private BooleanSupplier highSpeedSup;
@@ -35,7 +33,6 @@ public class TeleopSwerve extends Command {
       DoubleSupplier translationSup,
       DoubleSupplier strafeSup,
       DoubleSupplier rotationSup,
-      BooleanSupplier limelight, // NEEDS TO BE CHECKED
       BooleanSupplier robotCentricSup,
       BooleanSupplier slowSpeedSup,
       BooleanSupplier highSpeedSup,
@@ -46,7 +43,6 @@ public class TeleopSwerve extends Command {
     this.translationSup = translationSup;
     this.strafeSup = strafeSup;
     this.rotationSup = rotationSup;
-    this.limelight = limelight; // NEEDS TO BE CHECKED
     this.robotCentricSup = robotCentricSup;
     this.slowSpeedSup = slowSpeedSup;
     this.highSpeedSup = highSpeedSup;
