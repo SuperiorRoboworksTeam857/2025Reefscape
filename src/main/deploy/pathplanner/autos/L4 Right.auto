@@ -52,7 +52,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "wristIntake"
+                        "name": "wristIntakeUntilClear"
                       }
                     }
                   ]
@@ -75,6 +75,12 @@
                 "type": "path",
                 "data": {
                   "pathName": "L4 ReefBackRightToRightCoralStation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "wristIntake"
                 }
               }
             ]
@@ -100,6 +106,44 @@
                 "type": "named",
                 "data": {
                   "name": "elevatorL3_L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "driveToL4Left"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wristL4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "scoreCoral"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wristIntakeUntilClear"
+                      }
+                    }
+                  ]
                 }
               }
             ]
