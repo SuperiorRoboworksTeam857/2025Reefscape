@@ -54,8 +54,12 @@ public class Intake extends SubsystemBase {
   }
 
   public void outtakeGamePiece() {
-    double intakeSpeed = s_Wrist.invertIntake() ? 1.0 : -1.0;
-    runIntake(intakeSpeed);
+    if (s_Wrist.isWristAtGoal()) {
+      double intakeSpeed = s_Wrist.invertIntake() ? 1.0 : -1.0;
+      runIntake(intakeSpeed);
+    } else {
+      stopIntake();
+    }
   }
 
   public void stopIntake() {
