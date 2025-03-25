@@ -19,11 +19,12 @@ public class Wrist extends SubsystemBase {
   SparkMaxConfig config = new SparkMaxConfig();
   private final AbsoluteEncoder m_absoluteEncoder;
 
-  private static final double wristL2L3 = 0.776;
-  private static final double wristL4 = 0.22;//0.17
-  private static final double intake = 0.74;
+  private static final double wristL4 = 0.22;
   private static final double climbAngle = 0.25;
-  
+  private static final double clearOfReefAngle = 0.4;
+  private static final double intake = 0.74;
+  private static final double wristL2L3 = 0.776;
+
   public enum w_Positions {
     WRIST_L2_L3,
     WRIST_L4,
@@ -83,6 +84,10 @@ public class Wrist extends SubsystemBase {
 
   public boolean isWristAtGoal() {
     return Math.abs(m_absoluteEncoder.getPosition() - m_goalAngle) < 0.015;
+  }
+
+  public boolean isWristClearOfReef() {
+    return m_absoluteEncoder.getPosition() > clearOfReefAngle;
   }
 
   public w_Positions getIntendedPosition(){
