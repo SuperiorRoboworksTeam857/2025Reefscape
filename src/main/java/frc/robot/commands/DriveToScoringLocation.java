@@ -15,7 +15,7 @@ import frc.lib.math.OnboardModuleState;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class DriveToL4ScoringLocation extends Command {
+public class DriveToScoringLocation extends Command {
     private final Swerve s_Swerve;
     private boolean complete = false;
     private double m_angle = 0;
@@ -38,7 +38,7 @@ public class DriveToL4ScoringLocation extends Command {
 
     AprilTagFieldLayout m_layout;
 
-    public DriveToL4ScoringLocation(Swerve subsystem, AprilTagFieldLayout layout, Location poleLocation) {
+    public DriveToScoringLocation(Swerve subsystem, AprilTagFieldLayout layout, Location poleLocation) {
         s_Swerve = subsystem;
         m_layout = layout;
         m_poleLocation = poleLocation;
@@ -53,7 +53,7 @@ public class DriveToL4ScoringLocation extends Command {
        
         final int tagID = tagIDForSector(sector);
 
-        SmartDashboard.putNumber("DriveToL4 - tag", tagID);
+        SmartDashboard.putNumber("DriveToScore - tag", tagID);
 
         final var tagPose3D = m_layout.getTagPose(tagID);
 
@@ -73,7 +73,7 @@ public class DriveToL4ScoringLocation extends Command {
          
         m_angle = tagPose2D.getRotation().getDegrees() + angleOffset;
 
-        SmartDashboard.putNumber("DriveToL4 - goal angle", m_angle);
+        SmartDashboard.putNumber("DriveToScore - goal angle", m_angle);
 
         Translation2d alignment = Translation2d.kZero;
         switch (m_poleLocation) {
@@ -95,12 +95,8 @@ public class DriveToL4ScoringLocation extends Command {
         s_Swerve.field.getObject("tag").setPose(tagPose2D);
         s_Swerve.field.getObject("target").setPose(m_targetPose);
 
-        SmartDashboard.putNumber("DriveToL4 - target pose x", m_targetPose.getX());
-        SmartDashboard.putNumber("DriveToL4 - target pose y", m_targetPose.getY());
-        
-        
-
-
+        SmartDashboard.putNumber("DriveToScore - target pose x", m_targetPose.getX());
+        SmartDashboard.putNumber("DriveToScore - target pose y", m_targetPose.getY());
     }
 
     @Override
@@ -110,13 +106,13 @@ public class DriveToL4ScoringLocation extends Command {
         final double kPTurn = 0.2;
         final double kPTranslate = 2.5;
 
-        SmartDashboard.putNumber("DriveToL4 - gyroAngle", gyroAngle);
+        SmartDashboard.putNumber("DriveToScore - gyroAngle", gyroAngle);
 
         SwerveModuleState desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(m_angle * 0.5));
         desiredState = OnboardModuleState.optimize(desiredState, Rotation2d.fromDegrees(gyroAngle * 0.5));
         m_angle = desiredState.angle.getDegrees() * 2;
 
-        SmartDashboard.putNumber("DriveToL4 - corrected goal angle", m_angle);
+        SmartDashboard.putNumber("DriveToScore - corrected goal angle", m_angle);
 
         double turnErr = m_angle - gyroAngle;
         double turnSpeed = MathUtil.clamp(
@@ -124,7 +120,7 @@ public class DriveToL4ScoringLocation extends Command {
                 -Constants.Swerve.maxAngularVelocity * 0.5,
                 Constants.Swerve.maxAngularVelocity * 0.5);
 
-        SmartDashboard.putNumber("DriveToL4 - turn speed", turnSpeed);
+        SmartDashboard.putNumber("DriveToScore - turn speed", turnSpeed);
 
         double xErr = m_targetPose.getX() - s_Swerve.getPose().getX();
         double xSpeed = MathUtil.clamp(
@@ -137,8 +133,8 @@ public class DriveToL4ScoringLocation extends Command {
                 -Constants.Swerve.maxSpeed * 0.5,
                 Constants.Swerve.maxSpeed * 0.5);
 
-        SmartDashboard.putNumber("DriveToL4 - x speed", xSpeed);
-        SmartDashboard.putNumber("DriveToL4 - y speed", ySpeed);
+        SmartDashboard.putNumber("DriveToScore - x speed", xSpeed);
+        SmartDashboard.putNumber("DriveToScore - y speed", ySpeed);
 
 
         var alliance = DriverStation.getAlliance();
@@ -221,6 +217,4 @@ public class DriveToL4ScoringLocation extends Command {
 
         return tagID;
     }
-
-
 }

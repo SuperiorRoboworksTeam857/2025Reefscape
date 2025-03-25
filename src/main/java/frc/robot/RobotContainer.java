@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.DriveToL4ScoringLocation;
+import frc.robot.commands.DriveToScoringLocation;
 import frc.robot.commands.LimelightRead;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToReefCommand;
@@ -205,10 +205,10 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand("driveToL4Left",
-      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L4)
+      new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.LEFT_L4)
     );
     NamedCommands.registerCommand("driveToL4Right",
-      new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L4)
+      new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.RIGHT_L4)
     );
     
     s_Swerve.setDefaultCommand(
@@ -251,10 +251,10 @@ public class RobotContainer {
     // );
     alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, driverStick));
 
-    alignToLeftPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L4));
-    alignToRightPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L4));
-    alignToLeftPoleL2L3.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L2_L3));
-    alignToRightPoleL2L3.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L2_L3));
+    alignToLeftPoleL4.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.LEFT_L4));
+    alignToRightPoleL4.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.RIGHT_L4));
+    alignToLeftPoleL2L3.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.LEFT_L2_L3));
+    alignToRightPoleL2L3.whileTrue(new DriveToScoringLocation(s_Swerve, layout, DriveToScoringLocation.Location.RIGHT_L2_L3));
 
     // Limelight Controls
     // new JoystickButton(gamepad, XboxController.Button.kStart.value).whileTrue(
