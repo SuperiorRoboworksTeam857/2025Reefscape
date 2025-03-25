@@ -162,6 +162,13 @@ public class RobotContainer {
         new WaitUntilCommand(s_Wrist::isWristAtGoal)
       )
     );
+    NamedCommands.registerCommand("wristIntakeUntilClear",
+    new SequentialCommandGroup(
+      new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.INTAKE),s_Wrist),
+      new WaitUntilCommand(s_Wrist::isWristClearOfReef)
+    )
+  );
+
     NamedCommands.registerCommand("wristL4",
       new SequentialCommandGroup(
         new InstantCommand(() -> s_Wrist.goToAngle(w_Positions.WRIST_L4),s_Wrist),
