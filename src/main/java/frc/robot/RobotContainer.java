@@ -249,7 +249,7 @@ public class RobotContainer {
     //     new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000)
     //   )
     // );
-    alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, s_Limelight, driverStick, 5000));
+    alignToReef.whileTrue(new TurnToReefCommand(s_Swerve, driverStick));
 
     alignToLeftPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.LEFT_L4));
     alignToRightPoleL4.whileTrue(new DriveToL4ScoringLocation(s_Swerve, layout, DriveToL4ScoringLocation.Location.RIGHT_L4));
