@@ -74,29 +74,17 @@ public class RobotContainer {
   private final POVButton elevatorL2 = new POVButton(gamepad, 180);  // d-pad down
   private final POVButton elevatorL3_L4 = new POVButton(gamepad, 90);  // d-pad right
 
-  //private final JoystickButton elevatorL1 = new JoystickButton(gamepad, XboxController.Button.kX.value);
-
   private final JoystickButton dumpClimb = new JoystickButton(gamepad, XboxController.Button.kY.value);
   private final POVButton dumpL4 = new POVButton(gamepad, 0);  // d-pad up
 
-  // private final JoystickButton closeCageGrabber = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
-  // private final JoystickButton openCageGrabber = new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value);
-
-  // private final JoystickButton lowerAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kA.value);
-  // private final JoystickButton horizontalAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kB.value);
-  // private final JoystickButton raiseAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kY.value);
-
-  // private final JoystickButton reverseIntake = new JoystickButton(gamepad, XboxController.Button.kA.value);
-  // private final JoystickButton outtakeCoral = new JoystickButton(gamepad, XboxController.Button.kB.value);
-
-  private final Trigger newRaiseAlgaeArm = new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftTrigger.value) ) > 0.1);
-  private final JoystickButton newLowerAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value);
+  private final Trigger raiseAlgaeArm = new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftTrigger.value) ) > 0.1);
+  private final JoystickButton lowerAlgaeArm = new JoystickButton(gamepad, XboxController.Button.kLeftBumper.value);
   
-  private final Trigger newScoreCoral = new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kRightTrigger.value) ) > 0.1);
-  private final JoystickButton newReverseIntake = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
+  private final Trigger scoreCoral = new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kRightTrigger.value) ) > 0.1);
+  private final JoystickButton reverseIntake = new JoystickButton(gamepad, XboxController.Button.kRightBumper.value);
 
-  private final JoystickButton newCloseCageGrabber = new JoystickButton(gamepad, XboxController.Button.kA.value);
-  private final JoystickButton newOpenCageGrabber = new JoystickButton(gamepad, XboxController.Button.kB.value);
+  private final JoystickButton closeCageGrabber = new JoystickButton(gamepad, XboxController.Button.kA.value);
+  private final JoystickButton openCageGrabber = new JoystickButton(gamepad, XboxController.Button.kB.value);
 
   
 
@@ -324,15 +312,15 @@ public class RobotContainer {
     new Trigger(() -> Math.abs( gamepad.getRawAxis(XboxController.Axis.kLeftY.value) ) > 0.1)
         .whileTrue(new RunCommand(() -> s_Elevator.runElevatorForClimbing(-gamepad.getRawAxis(XboxController.Axis.kLeftY.value)), s_Elevator))
         .onFalse(new InstantCommand(() -> s_Elevator.runElevatorForClimbing(0)));
-    newCloseCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
-    newOpenCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
+    closeCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.closeCageGrabber(), s_Elevator));
+    openCageGrabber.whileTrue(new RunCommand(() -> s_Elevator.openCageGrabber(), s_Elevator));
    
-    newLowerAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.decrementHeight(), s_Arm));
-    newRaiseAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.incrementHeight(), s_Arm));
+    lowerAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.decrementHeight(), s_Arm));
+    raiseAlgaeArm.onTrue(new InstantCommand(() -> s_Arm.incrementHeight(), s_Arm));
 
     // Intake
-    newReverseIntake.whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
-    newScoreCoral.whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
+    reverseIntake.whileTrue(new RunCommand(() -> s_Intake.reverseIntake(), s_Intake));
+    scoreCoral.whileTrue(new RunCommand(() -> s_Intake.outtakeGamePiece(), s_Intake));
   }
     
 
