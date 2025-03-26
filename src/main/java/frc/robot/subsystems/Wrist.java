@@ -22,6 +22,7 @@ public class Wrist extends SubsystemBase {
   private static final double wristL4 = 0.22;
   private static final double climbAngle = 0.25;
   private static final double clearOfReefAngle = 0.4;
+  private static final double verticalAngle = 0.351;
   private static final double intake = 0.74;
   private static final double wristL2L3 = 0.776;
 
@@ -30,6 +31,7 @@ public class Wrist extends SubsystemBase {
     WRIST_L4,
     INTAKE,
     CLIMB_FINAL,
+    VERTICAL_FOR_AUTO
   }
 
   private static double deltaTime = 0.02;
@@ -78,6 +80,9 @@ public class Wrist extends SubsystemBase {
         break;
       case CLIMB_FINAL:
         m_goalAngle = climbAngle;
+        break;
+      case VERTICAL_FOR_AUTO:
+        m_goalAngle = verticalAngle;
         break;
     }
   }

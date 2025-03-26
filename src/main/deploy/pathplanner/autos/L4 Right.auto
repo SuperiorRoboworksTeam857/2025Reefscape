@@ -140,13 +140,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "wristIntakeUntilClear"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "lowerElevator"
+                        "name": "wristVertical"
                       }
                     }
                   ]
