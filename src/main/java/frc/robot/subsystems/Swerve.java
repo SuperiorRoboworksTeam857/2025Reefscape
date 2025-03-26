@@ -62,10 +62,10 @@ public class Swerve extends SubsystemBase {
           VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
     // Change the camera pose relative to robot center (x forward, y left, z up, degrees)
-    LimelightHelpers.setCameraPose_RobotSpace("limelight", Units.inchesToMeters(2-27*0.5), Units.inchesToMeters(0.25), 0.393, 0.0, 0.0, 180.0);
+    LimelightHelpers.setCameraPose_RobotSpace("limelight", Units.inchesToMeters(2-27*0.5), Units.inchesToMeters(0.25), 0.384, 0.0, 0.0, 180.0);
 
     // Set AprilTag offset tracking point (meters)
-    LimelightHelpers.setFiducial3DOffset("limelight", 0.0, 0.0, 0.393);
+    LimelightHelpers.setFiducial3DOffset("limelight", 0.0, 0.0, 0.384);
 
     field = new Field2d();
     SmartDashboard.putData("Field", field);
