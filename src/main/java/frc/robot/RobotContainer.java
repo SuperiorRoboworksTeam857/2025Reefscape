@@ -101,7 +101,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
 
     // Start camera streams for both webcams
